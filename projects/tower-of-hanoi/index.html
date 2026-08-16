@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5efe3">
+  <meta name="description" content="A playful, interactive Tower of Hanoi puzzle with adjustable difficulty and an animated solution.">
+  <title>Tower of Hanoi &mdash; Puzzle Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#game" aria-label="Tower of Hanoi home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>HANOI</span>
+    </a>
+    <p class="header-note">A classic puzzle, beautifully simple.</p>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">THREE TOWERS. ONE RULE.</p>
+      <h1 id="page-title">Move with<br><em>purpose.</em></h1>
+      <p class="intro-copy">Move the entire stack to the right tower. You can only move one disk at a time&mdash;and a larger disk can never sit on a smaller one.</p>
+    </section>
+
+    <section class="game-shell" id="game" aria-label="Tower of Hanoi game">
+      <div class="game-toolbar">
+        <div class="counter-block" aria-live="polite">
+          <span class="counter-label">MOVES USED</span>
+          <strong id="move-count">0</strong>
+          <span class="counter-optimal">BEST: <b id="optimal-count">7</b></span>
+        </div>
+
+        <div class="disk-control">
+          <span class="control-label">DISKS</span>
+          <div class="stepper">
+            <button type="button" id="disk-minus" aria-label="Use fewer disks">&minus;</button>
+            <output id="disk-count" aria-live="polite">3</output>
+            <button type="button" id="disk-plus" aria-label="Use more disks">+</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="button button-secondary" type="button" id="restart-button">
+            <span aria-hidden="true">&#8635;</span> Restart
+          </button>
+          <button class="button button-primary" type="button" id="solve-button">
+            Give me the answer <span aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="status-row">
+        <p id="game-status" role="status" aria-live="polite">Drag the top disk to another tower.</p>
+        <button type="button" id="stop-button" class="stop-button" hidden>Stop solution</button>
+      </div>
+
+      <div class="board" id="board">
+        <button class="tower" type="button" data-tower="0" aria-label="Tower A">
+          <span class="tower-letter">A</span>
+          <span class="peg" aria-hidden="true"></span>
+          <span class="disk-stack" id="tower-0" aria-hidden="true"></span>
+          <span class="base" aria-hidden="true"></span>
+        </button>
+        <button class="tower" type="button" data-tower="1" aria-label="Tower B">
+          <span class="tower-letter">B</span>
+          <span class="peg" aria-hidden="true"></span>
+          <span class="disk-stack" id="tower-1" aria-hidden="true"></span>
+          <span class="base" aria-hidden="true"></span>
+        </button>
+        <button class="tower" type="button" data-tower="2" aria-label="Tower C">
+          <span class="tower-letter">C</span>
+          <span class="peg" aria-hidden="true"></span>
+          <span class="disk-stack" id="tower-2" aria-hidden="true"></span>
+          <span class="base" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="rules" aria-labelledby="rules-title">
+      <div>
+        <p class="eyebrow">HOW TO PLAY</p>
+        <h2 id="rules-title">Simple rules.<br>Endless thinking.</h2>
+      </div>
+      <ol>
+        <li><span>01</span><p>Drag the top disk from any tower.</p></li>
+        <li><span>02</span><p>Drop it onto another tower.</p></li>
+        <li><span>03</span><p>Never place a larger disk on a smaller one.</p></li>
+      </ol>
+    </section>
+  </main>
+
+  <div class="celebration" id="celebration" role="dialog" aria-modal="true" aria-labelledby="celebration-title" hidden>
+    <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+    <div class="fireworks-layer" id="fireworks-layer" aria-hidden="true"></div>
+    <div class="celebration-card">
+      <p class="celebration-kicker">PUZZLE COMPLETE</p>
+      <h2 id="celebration-title">Well done!</h2>
+      <p class="clara-rules">CLARA RULES!</p>
+      <p id="celebration-score">You solved the puzzle.</p>
+      <button class="button celebration-button" type="button" id="celebration-restart">Play again <span aria-hidden="true">&#8635;</span></button>
+    </div>
+  </div>
+
+  <footer>
+    <p>THE TOWER OF HANOI</p>
+    <span>Invented by &Eacute;douard Lucas, 1883</span>
+  </footer>
+</body>
+</html>

@@ -1,103 +1,135 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5efe3">
-  <meta name="description" content="A playful, interactive Tower of Hanoi puzzle with adjustable difficulty and an animated solution.">
-  <title>Tower of Hanoi — Puzzle Game</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link href="resource/styles.css" rel="stylesheet">
-  <script src="resource/game.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clara Huang</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link href="resource/styles.css" rel="stylesheet">
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="#game" aria-label="Tower of Hanoi home">
-      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span>HANOI</span>
-    </a>
-    <p class="header-note">A classic puzzle, beautifully simple.</p>
-  </header>
+<body class="site-shell">
+<nav class="navbar navbar-expand-md sticky-top site-nav">
+  <div class="container">
+    <a class="navbar-brand" href="#home">Clara Huang</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a href="#introduction" class="nav-link">Introduction</a></li>
+        <li class="nav-item"><a href="#hobbies" class="nav-link">Hobbies</a></li>
+        <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+        <li class="nav-item"><a href="#achievements" class="nav-link">Achievements</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-  <main>
-    <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">THREE TOWERS. ONE RULE.</p>
-      <h1 id="page-title">Move with<br><em>purpose.</em></h1>
-      <p class="intro-copy">Move the entire stack to the right tower. You can only move one disk at a time—and a larger disk can never sit on a smaller one.</p>
-    </section>
+<main id="home">
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="eyebrow">Taiwan | Music | Sports | Robotics</div>
+      <h1>Clara Huang</h1>
+      <p>A bright personal space for favorite things, big interests, and achievements worth celebrating.</p>
+    </div>
+  </div>
+</section>
 
-    <section class="game-shell" id="game" aria-label="Tower of Hanoi game">
-      <div class="game-toolbar">
-        <div class="counter-block" aria-live="polite">
-          <span class="counter-label">MOVES USED</span>
-          <strong id="move-count">0</strong>
-          <span class="counter-optimal">BEST: <b id="optimal-count">7</b></span>
-        </div>
-
-        <div class="disk-control">
-          <span class="control-label">DISKS</span>
-          <div class="stepper">
-            <button type="button" id="disk-minus" aria-label="Use fewer disks">−</button>
-            <output id="disk-count" aria-live="polite">3</output>
-            <button type="button" id="disk-plus" aria-label="Use more disks">+</button>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="button button-secondary" type="button" id="restart-button">
-            <span aria-hidden="true">↻</span> Restart
-          </button>
-          <button class="button button-primary" type="button" id="solve-button">
-            Give me the answer <span aria-hidden="true">→</span>
-          </button>
-        </div>
+<section class="section" id="introduction">
+  <div class="container">
+    <div class="intro-panel">
+      <div class="intro-copy">
+        <h2 class="section-title">Introduction</h2>
+        <p>Hi! I'm Clara and I am living in Taiwan with my brother Lucas. My favorite color is green, my favorite food is ice cream, and I think pandas are the best animal in the whole entire world!</p>
       </div>
-
-      <div class="status-row">
-        <p id="game-status" role="status" aria-live="polite">Select a tower to pick up its top disk.</p>
-        <button type="button" id="stop-button" class="stop-button" hidden>Stop solution</button>
+      <div class="favorite-list" aria-label="Clara's favorites">
+        <div><span>Favorite color</span><strong>Green</strong></div>
+        <div><span>Favorite food</span><strong>Ice cream</strong></div>
+        <div><span>Best animal</span><strong>Pandas</strong></div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="board" id="board">
-        <button class="tower" type="button" data-tower="0" aria-label="Tower A">
-          <span class="tower-letter">A</span>
-          <span class="peg" aria-hidden="true"></span>
-          <span class="disk-stack" id="tower-0" aria-hidden="true"></span>
-          <span class="base" aria-hidden="true"></span>
-        </button>
-        <button class="tower" type="button" data-tower="1" aria-label="Tower B">
-          <span class="tower-letter">B</span>
-          <span class="peg" aria-hidden="true"></span>
-          <span class="disk-stack" id="tower-1" aria-hidden="true"></span>
-          <span class="base" aria-hidden="true"></span>
-        </button>
-        <button class="tower" type="button" data-tower="2" aria-label="Tower C">
-          <span class="tower-letter">C</span>
-          <span class="peg" aria-hidden="true"></span>
-          <span class="disk-stack" id="tower-2" aria-hidden="true"></span>
-          <span class="base" aria-hidden="true"></span>
-        </button>
+<section class="section" id="hobbies">
+  <div class="container">
+    <h2 class="section-title">Hobbies</h2>
+    <div class="hobby-grid">
+      <article class="hobby-card">
+        <img src="resource/Tennis.JPG" alt="Clara playing tennis">
+        <div class="hobby-card-body"><h3>Tennis</h3><p>Even when it is hot outside, I still enjoy playing tennis.</p></div>
+      </article>
+      <article class="hobby-card">
+        <img src="resource/Piano.JPG" alt="Clara at a piano performance">
+        <div class="hobby-card-body"><h3>Piano</h3><p>This is my first ever piano performance.</p></div>
+      </article>
+      <article class="hobby-card">
+        <img src="resource/Violin.JPG" alt="Clara performing violin with friends">
+        <div class="hobby-card-body"><h3>Violin</h3><p>I am performing with my two other friends from the orchestra.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section gallery-band" aria-label="Photo gallery">
+  <div class="container">
+    <div class="row align-items-end g-4 mb-4">
+      <div class="col-lg-7">
+        <h2 class="section-title mb-2">Adventure Gallery</h2>
+        <p class="lead mb-0">A small slideshow of moments from competitions, activities, and travels.</p>
       </div>
-    </section>
-
-    <section class="rules" aria-labelledby="rules-title">
-      <div>
-        <p class="eyebrow">HOW TO PLAY</p>
-        <h2 id="rules-title">Simple rules.<br>Endless thinking.</h2>
+    </div>
+    <div id="photoGallery" class="carousel slide carousel-fade carousel-frame" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active"><img src="resource/one.jpg" class="d-block w-100" alt="Clara achievement photo one"></div>
+        <div class="carousel-item"><img src="resource/two.jpg" class="d-block w-100" alt="Clara achievement photo two"></div>
+        <div class="carousel-item"><img src="resource/three.jpg" class="d-block w-100" alt="Clara achievement photo three"></div>
+        <div class="carousel-item"><img src="resource/four.jpg" class="d-block w-100" alt="Clara achievement photo four"></div>
+        <div class="carousel-item"><img src="resource/five.jpg" class="d-block w-100" alt="Clara achievement photo five"></div>
+        <div class="carousel-item"><img src="resource/six.jpg" class="d-block w-100" alt="Clara achievement photo six"></div>
+        <div class="carousel-item"><img src="resource/last.jpg" class="d-block w-100" alt="Clara achievement photo seven"></div>
       </div>
-      <ol>
-        <li><span>01</span><p>Click a tower to pick up its top disk.</p></li>
-        <li><span>02</span><p>Click another tower to place the disk.</p></li>
-        <li><span>03</span><p>Never place a larger disk on a smaller one.</p></li>
-      </ol>
-    </section>
-  </main>
+      <button class="carousel-control-prev" type="button" data-bs-target="#photoGallery" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+      <button class="carousel-control-next" type="button" data-bs-target="#photoGallery" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    <p>THE TOWER OF HANOI</p>
-    <span>Invented by Édouard Lucas, 1883</span>
-  </footer>
+<section class="section projects-band" id="projects">
+  <div class="container">
+    <div class="project-heading">
+      <div><span class="project-kicker">Made by Clara</span><h2 class="section-title">Projects</h2></div>
+      <p>Games, experiments, and ideas brought to life on the web.</p>
+    </div>
+    <article class="project-card">
+      <div class="project-preview" aria-hidden="true">
+        <span class="preview-peg peg-one"></span><span class="preview-peg peg-two"></span><span class="preview-peg peg-three"></span>
+        <span class="preview-disk disk-one"></span><span class="preview-disk disk-two"></span><span class="preview-disk disk-three"></span><span class="preview-base"></span>
+      </div>
+      <div class="project-copy">
+        <span class="project-number">PROJECT 01</span>
+        <h3>Tower of Hanoi</h3>
+        <p>Test your logic in the classic disk-stacking puzzle. Choose your difficulty, count your moves, or watch the perfect solution unfold.</p>
+        <a class="project-link" href="projects/tower-of-hanoi/">Play the game <span aria-hidden="true">→</span></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="achievements">
+  <div class="container">
+    <h2 class="section-title">Achievements</h2>
+    <ul class="achievement-list">
+      <li>NSDA Elementary Storytelling 3rd place</li><li>NSDA Smart Debate Top Speaker</li><li>NSDA Smart Debate Semi-Finalist</li><li>NSDA Smart Debate Finalist</li><li>NSDA Smart Debate Champion</li><li>RoboMission Taiwan 2nd place</li><li>RoboMission Taiwan Representer</li><li>RoboMission Philippines 7th place</li><li>RoboMission Singapore 6th place</li><li>Taiwan APRA 4th place</li><li>TISSA Mixed Freestyle Relay 3rd place</li><li>Tennis Competition Champion</li>
+    </ul>
+    <div class="spotlight" aria-label="More activity photos">
+      <img src="resource/Robot.JPG" alt="Clara with a robot project"><img src="resource/Ski.JPG" alt="Clara skiing"><img src="resource/Title.JPG" alt="Clara smiling outdoors">
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="container d-flex flex-column flex-md-row justify-content-between gap-2"><span>Copyright Clara's Crazy Company</span><span>Made with green energy and big ideas.</span></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
