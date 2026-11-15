@@ -7,4 +7,4 @@ Open `index.html` through the site or a local HTTP server. This is the current s
 
 To regenerate the export, use the Visualize skill's `scripts/render.py` with `game-source.html` as the source and `index.html` as the destination, and pass `--title "Animal Monopoly" --force`.
 
-Rent values and building rules are displayed, but automatic rent collection, construction, jail rules, and mystery-card effects are not implemented yet.
+Landing on another player’s property transfers the full base rent to its owner, even if the visitor’s balance goes below zero. Passing or reaching Go awards $200. Landing on the $500 corner awards $500. Construction, jail rules, and mystery-card effects are not implemented yet.

@@ -1790,7 +1790,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;style&gt;
     #animal-monopoly-map { color-scheme: light dark; --paper:light-dark(#faf8f2,#222923); --ink:light-dark(#23382d,#edf3ec); --line:light-dark(#bcc6bb,#58665c); --tile:light-dark(#fffef9,#2c342e); --soft:light-dark(#eaf0e5,#333e34); color:var(--ink); font:14px/1.4 system-ui,sans-serif; }
     #animal-monopoly-map * { box-sizing:border-box; }
-    #animal-monopoly-map .board { display:grid; grid-template-columns:100px repeat(9,minmax(0,1fr)) 100px; grid-template-rows:minmax(112px,auto) repeat(9,minmax(68px,auto)) minmax(112px,auto); gap:1px; background:var(--line); border:1px solid var(--line); }
+    #animal-monopoly-map .board { display:grid; grid-template-columns:100px repeat(9,minmax(0,1fr)) 100px; grid-template-rows:minmax(60px,auto) repeat(9,minmax(36px,auto)) minmax(60px,auto); gap:1px; background:var(--line); border:1px solid var(--line); }
     #animal-monopoly-map .space { border:0; margin:0; border-radius:0; padding:15px 3px 5px; position:relative; background:var(--tile); color:var(--ink); font:500 12px/1.25 system-ui,sans-serif; overflow-wrap:normal; display:flex; align-items:center; justify-content:center; text-align:center; }
     #animal-monopoly-map button.space { flex-direction:column; gap:3px; }
     #animal-monopoly-map .rent-label { font-size:11px; font-weight:400; white-space:normal; font-variant-numeric:tabular-nums; }
@@ -1814,7 +1814,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .space[data-group]::before { display:none; }
     #animal-monopoly-map .space:is([data-group=&quot;Black&quot;],[data-group=&quot;Brown&quot;],[data-group=&quot;Dark blue&quot;]) { color:white; }
     #animal-monopoly-map .space .piece { background:#fff; border-radius:4px; color:#14251b; --ink:#14251b; }
-    #animal-monopoly-map .space .owned-mark { background:currentColor; }
+
     #animal-monopoly-map .space[aria-pressed=&quot;true&quot;] { box-shadow:inset 0 0 0 2px var(--ink); }
     #animal-monopoly-map .center { grid-column:2/11; grid-row:2/11; background:light-dark(#c7dfc8,#2c4939); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:16px; gap:12px; }
     #animal-monopoly-map .heading { font-size:22px; line-height:1.1; font-weight:500; letter-spacing:.04em; margin:0; }
@@ -1834,10 +1834,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .counter-editor input { width:7em; margin:6px; padding:8px; font:inherit; }
     #animal-monopoly-map .counter-editor summary { cursor:pointer; }
     #animal-monopoly-map .new-game { margin-top:16px; }
-    #animal-monopoly-map .play-controls { display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding-right:90px; margin-bottom:12px; }
+    #animal-monopoly-map .play-controls { display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; margin-bottom:6px; }
     #animal-monopoly-map .game-button { font:500 14px/1.3 system-ui,sans-serif; min-height:44px; border:1px solid var(--ink); border-radius:7px; background:var(--ink); color:var(--paper); padding:9px 16px; }
     #animal-monopoly-map .game-button:disabled { background:var(--soft); color:var(--ink); border-color:var(--line); }
-    #animal-monopoly-map .die-face { width:72px; height:72px; flex-shrink:0; display:block; }
+    #animal-monopoly-map .die-face { width:46px; height:46px; flex-shrink:0; display:block; }
     #animal-monopoly-map .dice-pair { display:flex; align-items:center; gap:4px; }
     #animal-monopoly-map .dice-total { font-size:13px; font-variant-numeric:tabular-nums; }
     #animal-monopoly-map .turn-status { margin-bottom:12px; min-height:20px; font-size:13px; }
@@ -1865,7 +1865,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .setup-form label { display:flex; flex-direction:column; gap:6px; }
     #animal-monopoly-map .setup input { width:110px; min-height:44px; font:16px system-ui,sans-serif; padding:8px; border:1px solid var(--line); border-radius:6px; background:var(--tile); color:var(--ink); }
     #animal-monopoly-map .setup[hidden],#animal-monopoly-map .game-content[hidden],#animal-monopoly-map .continue-game[hidden] { display:none; }
-    #animal-monopoly-map .owned-mark { position:absolute; bottom:3px; right:3px; width:6px; height:6px; background:var(--ink); border-radius:50%; }
+    #animal-monopoly-map .owned-mark { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:750; font-size:10px; }
     #animal-monopoly-map .owned-mark[hidden] { display:none; }
     #animal-monopoly-map .purchase-summary { display:flex; flex-wrap:wrap; justify-content:center; gap:5px 16px; margin:7px 0; }
     #animal-monopoly-map .buy-action { margin:9px 0 5px; }
@@ -1883,6 +1883,13 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .trade-message { margin:8px 0; font-size:13px; }
     #animal-monopoly-map .request-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; border-top:1px solid var(--line); padding:10px 0; }
     #animal-monopoly-map .request-text { flex:1 1 220px; font-size:13px; }
+    #animal-monopoly-map .bulletin { background:var(--soft); border-left:4px solid #528460; padding:8px 12px; }
+    #animal-monopoly-map .roster-player ul { max-height:3.5em; overflow:auto; }
+    #animal-monopoly-map .board .space[data-group] { padding:2px; gap:0; }
+    #animal-monopoly-map .side-left .rent-label,#animal-monopoly-map .side-right .rent-label { font-size:10px; }
+    #animal-monopoly-map .turn-status { margin:4px 0; }
+    #animal-monopoly-map .mobile-track { display:flex; overflow-x:auto; }
+    #animal-monopoly-map .mobile-track .space { flex:0 0 90px; min-height:80px; }
     @media(max-width:480px) { #animal-monopoly-map .trade-form { grid-template-columns:1fr; } }
     @media(max-width:700px) { #animal-monopoly-map .board { display:none; } #animal-monopoly-map .mobile { display:block; } }
   &lt;/style&gt;
@@ -1902,6 +1909,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;strong role=&quot;status&quot;&gt;&lt;/strong&gt;
     &lt;button type=&quot;button&quot; class=&quot;game-button secondary-button review-trades&quot;&gt;Review offers&lt;/button&gt;
   &lt;/aside&gt;
+  &lt;p class=&quot;bulletin&quot; role=&quot;status&quot; hidden&gt;&lt;/p&gt;
+  &lt;div class=&quot;trade-requests&quot; aria-label=&quot;Pending trade requests&quot;&gt;&lt;/div&gt;
   &lt;div class=&quot;play-controls&quot;&gt;
     &lt;div class=&quot;dice-pair&quot; role=&quot;group&quot; aria-label=&quot;Two dice&quot;&gt;
       &lt;canvas class=&quot;die-face die-one&quot; width=&quot;144&quot; height=&quot;144&quot; role=&quot;img&quot; aria-label=&quot;First die ready to roll&quot;&gt;&lt;/canvas&gt;
@@ -1911,6 +1920,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;button type=&quot;button&quot; class=&quot;game-button roll-button cursor-interaction&quot;&gt;Roll dice&lt;/button&gt;
     &lt;button type=&quot;button&quot; class=&quot;game-button secondary-button end-turn cursor-interaction&quot; disabled&gt;End turn&lt;/button&gt;
     &lt;button type=&quot;button&quot; class=&quot;game-button secondary-button trade-toggle cursor-interaction&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;monopoly-trade-panel&quot;&gt;Trade&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;landing-choice&quot; hidden&gt;
+    &lt;button type=&quot;button&quot; class=&quot;game-button landing-buy&quot;&gt;&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;game-button secondary-button leave&quot;&gt;Leave it&lt;/button&gt;
   &lt;/div&gt;
   &lt;div class=&quot;turn-status&quot; role=&quot;status&quot;&gt;Player 1 starts on Go. Roll to move.&lt;/div&gt;
   &lt;section id=&quot;monopoly-trade-panel&quot; class=&quot;trade-panel&quot; aria-label=&quot;Property trades&quot; hidden&gt;
@@ -1924,7 +1937,6 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;/form&gt;
     &lt;p class=&quot;trade-note&quot;&gt;&lt;/p&gt;
     &lt;p class=&quot;trade-message&quot; role=&quot;status&quot;&gt;&lt;/p&gt;
-    &lt;div class=&quot;trade-requests&quot; aria-label=&quot;Pending trade requests&quot;&gt;&lt;/div&gt;
   &lt;/section&gt;
   &lt;div class=&quot;board&quot; role=&quot;group&quot; aria-label=&quot;Animal Monopoly board: forty spaces, Go at bottom right, Jail at bottom left, $500 at top left, Go to Jail at top right&quot;&gt;
     &lt;div class=&quot;center&quot;&gt;
@@ -1932,7 +1944,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;div class=&quot;detail&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;mobile&quot;&gt;&lt;div class=&quot;mobile-detail&quot; aria-live=&quot;polite&quot;&gt;Animal Monopoly · 40 spaces&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;mobile&quot;&gt;&lt;div class=&quot;mobile-track&quot; aria-label=&quot;Board spaces&quot;&gt;&lt;/div&gt;&lt;div class=&quot;mobile-detail&quot; aria-live=&quot;polite&quot;&gt;Animal Monopoly · 40 spaces&lt;/div&gt;&lt;/div&gt;
   &lt;button type=&quot;button&quot; class=&quot;game-button secondary-button new-game&quot;&gt;New game&lt;/button&gt;
   &lt;/div&gt;
   &lt;script&gt;
@@ -1981,6 +1993,8 @@ html&gt;body{padding:0}&lt;/style&gt;
       let tradeMessage=&#x27;&#x27;;
       let gameStarted=false;
       let hasSavedGame=false;
+      let tradeBulletin=&#x27;&#x27;;
+      let leftProperty=false;
       let turnPhase=&#x27;roll&#x27;;
       let cpuTimer;
       const money=value=&gt;&#x27;$&#x27;+value.toLocaleString(&#x27;en-US&#x27;);
@@ -2018,13 +2032,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         const isOwned=owner===activePlayer;
         const otherOwner=owner!==null&amp;&amp;!isOwned;
         const onProperty=track[position]===name;
-        const canBuy=gameStarted&amp;&amp;turnPhase===&#x27;action&#x27;&amp;&amp;onProperty&amp;&amp;owner===null&amp;&amp;cash&gt;=price;
+        const canBuy=gameStarted&amp;&amp;pendingPurchase()&amp;&amp;onProperty&amp;&amp;owner===null&amp;&amp;cash&gt;=price;
         const groupCount=data.animals.filter(animal=&gt;owned.has(animal)).length;
-        const buttonText=isOwned?&#x27;Owned by &#x27;+playerName(owner):otherOwner?&#x27;Request to buy from &#x27;+playerName(owner):!onProperty?&#x27;Land here to buy&#x27;:turnPhase!==&#x27;action&#x27;?&#x27;Roll to move first&#x27;:cash&lt;price?&#x27;Need &#x27;+money(price-cash)+&#x27; more&#x27;:&#x27;Buy &#x27;+name+&#x27; · &#x27;+money(price);
-        const markup=&#x27;&lt;h3 class=&quot;detail-title&quot;&gt;&#x27;+name+&#x27;&lt;/h3&gt;&lt;div class=&quot;detail-meta&quot;&gt;&#x27;+group+&#x27; group · &#x27;+(owner!==null?&#x27;Owner: &lt;span class=&quot;owner-name&quot;&gt;&lt;/span&gt;&#x27;:&#x27;Unowned&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;purchase-summary&quot;&gt;&lt;span&gt;Bank price: &lt;strong&gt;&#x27;+money(price)+&#x27;&lt;/strong&gt;&lt;/span&gt;&lt;span&gt;Your cash: &lt;strong&gt;&#x27;+money(cash)+&#x27;&lt;/strong&gt;&lt;/span&gt;&lt;/div&gt;&lt;table class=&quot;rent-table&quot; aria-label=&quot;Suggested rent for &#x27;+name+&#x27;&quot;&gt;&lt;tbody&gt;&#x27;+rows+&#x27;&lt;/tbody&gt;&lt;/table&gt;&lt;div class=&quot;detail-meta&quot;&gt;House: &#x27;+money(data.price)+&#x27; · Hotel construction: &#x27;+money(data.price*5)+&#x27; total&lt;div class=&quot;group-members&quot;&gt;&#x27;+data.animals.map(animal=&gt;animal+(owned.has(animal)?&#x27; ✓&#x27;:&#x27;&#x27;)).join(&#x27; · &#x27;)+&#x27;&lt;/div&gt;Your group: &#x27;+groupCount+&#x27;/&#x27;+data.animals.length+&#x27;&lt;/div&gt;&lt;div class=&quot;buy-action&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;game-button buy-button cursor-interaction&quot;&#x27;+(canBuy||otherOwner?&#x27;&#x27;:&#x27; disabled&#x27;)+&#x27;&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;group-rules&quot;&gt;Own the full group to build. Uneven building is allowed. The fifth house becomes a hotel automatically.&lt;/div&gt;&#x27;;
+        const buttonText=isOwned?&#x27;Owned by &#x27;+playerName(owner):otherOwner?&#x27;Request to buy from &#x27;+playerName(owner):!onProperty?&#x27;Land here to buy&#x27;:turnPhase!==&#x27;action&#x27;?&#x27;Roll to move first&#x27;:cash&lt;price?&#x27;Need &#x27;+money(price-cash)+&#x27; more&#x27;:leftProperty?&#x27;Left unowned&#x27;:&#x27;Buy &#x27;+name+&#x27; · &#x27;+money(price);
+        const markup=&#x27;&lt;h3 class=&quot;detail-title&quot;&gt;&#x27;+name+&#x27;&lt;/h3&gt;&lt;div class=&quot;detail-meta&quot;&gt;&#x27;+group+&#x27; group · &#x27;+(owner!==null?&#x27;Owner: &lt;span class=&quot;owner-name&quot;&gt;&lt;/span&gt;&#x27;:&#x27;Unowned&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;purchase-summary&quot;&gt;&lt;span&gt;Bank price: &lt;strong&gt;&#x27;+money(price)+&#x27;&lt;/strong&gt;&lt;/span&gt;&lt;span&gt;Your cash: &lt;strong&gt;&#x27;+money(cash)+&#x27;&lt;/strong&gt;&lt;/span&gt;&lt;/div&gt;&lt;details&gt;&lt;summary&gt;Rent and building details&lt;/summary&gt;&lt;table class=&quot;rent-table&quot; aria-label=&quot;Suggested rent for &#x27;+name+&#x27;&quot;&gt;&lt;tbody&gt;&#x27;+rows+&#x27;&lt;/tbody&gt;&lt;/table&gt;&lt;div class=&quot;detail-meta&quot;&gt;House: &#x27;+money(data.price)+&#x27; · Hotel construction: &#x27;+money(data.price*5)+&#x27; total&lt;div class=&quot;group-members&quot;&gt;&#x27;+data.animals.map(animal=&gt;animal+(owned.has(animal)?&#x27; ✓&#x27;:&#x27;&#x27;)).join(&#x27; · &#x27;)+&#x27;&lt;/div&gt;Your group: &#x27;+groupCount+&#x27;/&#x27;+data.animals.length+&#x27;&lt;/div&gt;&lt;/details&gt;&lt;div class=&quot;buy-action&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;game-button buy-button cursor-interaction&quot;&#x27;+(canBuy||otherOwner?&#x27;&#x27;:&#x27; disabled&#x27;)+&#x27;&gt;&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;group-rules&quot;&gt;Own the full group to build. Uneven building is allowed. The fifth house becomes a hotel automatically.&lt;/div&gt;&#x27;;
         panels.forEach(panel=&gt;{
           panel.innerHTML=markup;
           if(owner!==null) panel.querySelector(&#x27;.owner-name&#x27;).textContent=playerName(owner);
+          panel.querySelector(&#x27;.buy-action&#x27;).hidden=Boolean(onProperty &amp;&amp; pendingPurchase());
           panel.querySelector(&#x27;.buy-button&#x27;).textContent=buttonText;
           panel.querySelector(&#x27;.buy-button&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;otherOwner?openTrade(name):buy(name));
         });
@@ -2033,7 +2048,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         selectedAnimal=null;
         const name=track[position];
         buttons.forEach(button=&gt;{button.classList.toggle(&#x27;is-related&#x27;,false);button.setAttribute(&#x27;aria-pressed&#x27;,&#x27;false&#x27;);});
-        const description={Go:&#x27;Collect $200 each time your move reaches or passes Go.&#x27;,Jail:&#x27;Jail and release rules still need to be set.&#x27;,&#x27;$500&#x27;:&#x27;The collect or pay rule for this corner still needs to be set.&#x27;,&#x27;Go to Jail&#x27;:&#x27;Jail movement is not active in this preview.&#x27;,&#x27;Mystery Card&#x27;:&#x27;15 cards proposed. Card drawing is not active in this preview.&#x27;}[name];
+        const description={Go:&#x27;Collect $200 each time your move reaches or passes Go.&#x27;,Jail:&#x27;Jail and release rules still need to be set.&#x27;,&#x27;$500&#x27;:&#x27;Collect $500 when you land here.&#x27;,&#x27;Go to Jail&#x27;:&#x27;Jail movement is not active in this preview.&#x27;,&#x27;Mystery Card&#x27;:&#x27;15 cards proposed. Card drawing is not active in this preview.&#x27;}[name];
         panels.forEach(panel=&gt;{
           panel.innerHTML=&#x27;&lt;h3 class=&quot;detail-title&quot;&gt;&#x27;+name+&#x27;&lt;/h3&gt;&lt;p&gt;&#x27;+description+&#x27;&lt;/p&gt;&lt;div class=&quot;detail-meta&quot;&gt;&lt;span class=&quot;current-name&quot;&gt;&lt;/span&gt; · &#x27;+money(cash)+&#x27; · &#x27;+owned.size+&#x27; animals owned&lt;/div&gt;&#x27;;
           panel.querySelector(&#x27;.current-name&#x27;).textContent=playerName(activePlayer);
@@ -2043,8 +2058,12 @@ html&gt;body{padding:0}&lt;/style&gt;
         if(selectedAnimal&amp;&amp;animalGroups[selectedAnimal]) select(animalGroups[selectedAnimal],selectedAnimal);
         else showSpecial();
       }
+      function pendingPurchase() {
+        const name=track[position];
+        return turnPhase===&#x27;action&#x27; &amp;&amp; !leftProperty &amp;&amp; animalGroups[name] &amp;&amp; ownerOf(name)===null;
+      }
       function buy(name) {
-        if(!gameStarted||turnPhase!==&#x27;action&#x27;||track[position]!==name||ownerOf(name)!==null||!animalGroups[name]) return;
+        if(!gameStarted||!pendingPurchase()||track[position]!==name||ownerOf(name)!==null||!animalGroups[name]) return;
         const price=purchasePrice(name);
         if(cash&lt;price) return;
         cash-=price;
@@ -2055,6 +2074,11 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
       const pause=ms=&gt;new Promise(resolve=&gt;setTimeout(resolve,ms));
       const dieValue=()=&gt;1+Math.floor(Math.random()*6);
+      function centerMobileTile(index) {
+        const strip=mobile.querySelector(&#x27;.mobile-track&#x27;);
+        const tile=strip.querySelector(&#x27;[data-index=&quot;&#x27;+index+&#x27;&quot;]&#x27;);
+        strip.scrollLeft+=tile.getBoundingClientRect().left-strip.getBoundingClientRect().left-(strip.clientWidth-tile.offsetWidth)/2;
+      }
       async function movePiece(from,to) {
         const animations=[];
         for(const layout of [board,mobile]) {
@@ -2065,6 +2089,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           target.hidden=false;
           target.append(piece);
           source.hidden=!source.childElementCount;
+          if(layout===mobile &amp;&amp; mobile.offsetWidth) centerMobileTile(to);
           const after=piece.getBoundingClientRect();
           if(after.width &amp;&amp; !matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches) {
             piece.style.zIndex=&#x27;2&#x27;;
@@ -2103,14 +2128,28 @@ html&gt;body{padding:0}&lt;/style&gt;
           await movePiece((position+step)%track.length,(position+step+1)%track.length);
         }
         content.inert=false;
+        leftProperty=false;
         cash+=goBonus;
         position=nextPosition%track.length;
         turnPhase=&#x27;action&#x27;;
         const name=track[position];
         selectedAnimal=animalGroups[name]?name:null;
-        turnMessage=playerName(activePlayer)+&#x27; rolled &#x27;+lastDice[0]+&#x27; + &#x27;+lastDice[1]+&#x27; = &#x27;+lastRoll+&#x27; · Landed on &#x27;+name+&#x27;.&#x27;+(goBonus?&#x27; Collected &#x27;+money(goBonus)+&#x27; for Go.&#x27;:&#x27;&#x27;)+(!animalGroups[name]&amp;&amp;name!==&#x27;Go&#x27;?&#x27; Special-space effect is not active yet.&#x27;:&#x27;&#x27;);
+        turnMessage=playerName(activePlayer)+&#x27; rolled &#x27;+lastDice[0]+&#x27; + &#x27;+lastDice[1]+&#x27; = &#x27;+lastRoll+&#x27; · Landed on &#x27;+name+&#x27;.&#x27;+(goBonus?&#x27; Collected &#x27;+money(goBonus)+&#x27; for Go.&#x27;:&#x27;&#x27;);
+        turnMessage+=settleLanding(name);
         render();
         saveState();
+      }
+      function settleLanding(name) {
+        if(name===&#x27;$500&#x27;) {
+          cash+=500;
+          return &#x27; Collected $500.&#x27;;
+        }
+        const owner=ownerOf(name);
+        if(owner===null||owner===activePlayer) return &#x27;&#x27;;
+        const rent=groups[animalGroups[name]].baseRent;
+        cash-=rent;
+        getPlayer(owner).cash+=rent;
+        return &#x27; Paid &#x27;+money(rent)+&#x27; rent to &#x27;+playerName(owner)+&#x27;.&#x27;;
       }
       function setOptions(control,items,value) {
         control.replaceChildren();
@@ -2137,7 +2176,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         else offerControl.max=String(cash);
         if(name&amp;&amp;(name!==before||!offerControl.value||preferred)) offerControl.value=String(purchasePrice(name));
         if(!name) offerControl.value=&#x27;&#x27;;
-        root.querySelector(&#x27;.trade-note&#x27;).textContent=!names.length?(seller?playerName(seller.id)+&#x27; does not own any animals yet.&#x27;:&#x27;Choose another player.&#x27;):selling?&#x27;Choose your property and asking price. The buyer reviews your offer on their turn.&#x27;:&#x27;Your cash: &#x27;+money(cash)+&#x27;. Money stays with you until the owner accepts. The owner reviews requests on their turn.&#x27;;
+        root.querySelector(&#x27;.trade-note&#x27;).textContent=!names.length?(seller?playerName(seller.id)+&#x27; does not own any animals yet.&#x27;:&#x27;Choose another player.&#x27;):selling?&#x27;Choose your property and asking price. The buyer can respond immediately.&#x27;:&#x27;Your cash: &#x27;+money(cash)+&#x27;. Money stays with you until the owner accepts. The owner can respond immediately.&#x27;;
       }
       function openTrade(name) {
         if(!gameStarted) return;
@@ -2163,7 +2202,8 @@ html&gt;body{padding:0}&lt;/style&gt;
         else {
           requests.push({id:nextRequestId++,kind:tradeMode.value,buyer,seller,animal:name,amount});
           tradeMessage=selling?&#x27;Offered to sell &#x27;+name+&#x27; to &#x27;+playerName(buyer)+&#x27; for &#x27;+money(amount)+&#x27;.&#x27;:playerName(activePlayer)+&#x27; offered &#x27;+money(amount)+&#x27; to &#x27;+playerName(seller)+&#x27; for &#x27;+name+&#x27;. Awaiting the owner’s decision.&#x27;;
-          saveState();
+          render();saveState();
+          return;
         }
         renderTrades();
       }
@@ -2178,21 +2218,21 @@ html&gt;body{padding:0}&lt;/style&gt;
           requests=requests.filter(item=&gt;item.id!==id);
           tradeMessage=&#x27;Offer for &#x27;+request.animal+&#x27; cancelled.&#x27;;
         } else {
-          if(activePlayer!==recipient(request)) return;
+          const responder=recipient(request);
           if(decision===&#x27;counter&#x27;) {
             if(!Number.isSafeInteger(price)||price&lt;=0||price===request.amount) {
               tradeMessage=&#x27;Enter a different positive whole-dollar price.&#x27;;
-            } else if(activePlayer===buyer.id &amp;&amp; price&gt;buyer.cash) {
+            } else if(responder===buyer.id &amp;&amp; price&gt;buyer.cash) {
               tradeMessage=&#x27;Your counteroffer exceeds your cash.&#x27;;
             } else {
               request.amount=price;
-              request.kind=activePlayer===buyer.id?&#x27;buy&#x27;:&#x27;sell&#x27;;
+              request.kind=responder===buyer.id?&#x27;buy&#x27;:&#x27;sell&#x27;;
               request.counter=true;
-              tradeMessage=&#x27;Counteroffer sent to &#x27;+playerName(recipient(request))+&#x27;.&#x27;;
+              tradeBulletin=tradeMessage=playerName(responder)+&#x27; counteroffered &#x27;+money(price)+&#x27; for &#x27;+request.animal+&#x27; to &#x27;+playerName(recipient(request))+&#x27;.&#x27;;
             }
           } else if(decision===&#x27;decline&#x27;) {
             requests=requests.filter(item=&gt;item.id!==id);
-            tradeMessage=playerName(activePlayer)+&#x27; declined the offer for &#x27;+request.animal+&#x27;.&#x27;;
+            tradeBulletin=tradeMessage=playerName(responder)+&#x27; declined the &#x27;+money(request.amount)+&#x27; offer for &#x27;+request.animal+&#x27;.&#x27;;
           } else if(decision===&#x27;accept&#x27;) {
             if(!seller||!buyer||ownerOf(request.animal)!==request.seller) {
               requests=requests.filter(item=&gt;item.id!==id);
@@ -2206,7 +2246,7 @@ html&gt;body{padding:0}&lt;/style&gt;
               buyer.owned.push(request.animal);
               requests=requests.filter(item=&gt;item.animal!==request.animal);
               loadPlayer();
-              tradeMessage=playerName(seller.id)+&#x27; sold &#x27;+request.animal+&#x27; to &#x27;+playerName(buyer.id)+&#x27; for &#x27;+money(request.amount)+&#x27;.&#x27;;
+              tradeBulletin=tradeMessage=playerName(responder)+&#x27; accepted. &#x27;+playerName(seller.id)+&#x27; sold &#x27;+request.animal+&#x27; to &#x27;+playerName(buyer.id)+&#x27; for &#x27;+money(request.amount)+&#x27;.&#x27;;
               turnMessage=tradeMessage;
             }
           } else return;
@@ -2215,7 +2255,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         saveState();
       }
       function renderTrades() {
-        const incoming=requests.filter(item=&gt;recipient(item)===activePlayer);
+        const incoming=requests;
         const notice=root.querySelector(&#x27;.trade-notice&#x27;);
         notice.hidden=!incoming.length;
         const counts=[];
@@ -2223,7 +2263,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         for(const [count,type] of [[incoming.length-counters,&#x27;trade request&#x27;],[counters,&#x27;counteroffer&#x27;]]) {
           if(count) counts.push(count+&#x27; &#x27;+type+(count===1?&#x27;&#x27;:&#x27;s&#x27;));
         }
-        const message=incoming.length?playerName(activePlayer)+&#x27;, you have &#x27;+counts.join(&#x27; and &#x27;)+&#x27;.&#x27;:&#x27;&#x27;;
+        const message=incoming.length?counts.join(&#x27; and &#x27;)+&#x27; awaiting a response.&#x27;:&#x27;&#x27;;
         const status=notice.querySelector(&#x27;strong&#x27;);
         if(status.textContent!==message) status.textContent=message;
         const toggle=root.querySelector(&#x27;.trade-toggle&#x27;);
@@ -2237,8 +2277,11 @@ html&gt;body{padding:0}&lt;/style&gt;
         root.querySelector(&#x27;.trade-message&#x27;).textContent=tradeMessage;
         const list=root.querySelector(&#x27;.trade-requests&#x27;);
         list.replaceChildren();
-        const relevant=requests.filter(item=&gt;item.buyer===activePlayer||item.seller===activePlayer);
-        if(!relevant.length) {const empty=document.createElement(&#x27;p&#x27;);empty.className=&#x27;trade-note&#x27;;empty.textContent=&#x27;No pending requests for &#x27;+playerName(activePlayer)+&#x27;.&#x27;;list.appendChild(empty);}
+        const bulletin=root.querySelector(&#x27;.bulletin&#x27;);
+        bulletin.hidden=!tradeBulletin;
+        bulletin.textContent=tradeBulletin;
+        const relevant=requests;
+
         relevant.forEach(request=&gt;{
           const row=document.createElement(&#x27;div&#x27;);row.className=&#x27;request-row&#x27;;
           const label=document.createElement(&#x27;span&#x27;);label.className=&#x27;request-text&#x27;;
@@ -2248,13 +2291,16 @@ html&gt;body{padding:0}&lt;/style&gt;
             :playerName(request.buyer)+&#x27; offers to buy &#x27;+terms+&#x27; from &#x27;+playerName(request.seller);
           if(request.counter) label.prepend(&#x27;Counteroffer · &#x27;);
           row.appendChild(label);
-          const actions=recipient(request)===activePlayer?[[&#x27;Accept&#x27;,&#x27;accept&#x27;],[&#x27;Decline&#x27;,&#x27;decline&#x27;]]:[[&#x27;Cancel request&#x27;,&#x27;cancel&#x27;]];
+          const responder=recipient(request);
+          label.append(&#x27; · &#x27;+playerName(responder)+&#x27; to respond&#x27;);
+          const actions=getPlayer(responder).cpu?[]:[[&#x27;Accept&#x27;,&#x27;accept&#x27;],[&#x27;Decline&#x27;,&#x27;decline&#x27;]];
+          if(activePlayer!==responder &amp;&amp; (request.buyer===activePlayer||request.seller===activePlayer)) actions.push([&#x27;Cancel request&#x27;,&#x27;cancel&#x27;]);
           actions.forEach(([title,action])=&gt;{
             const button=document.createElement(&#x27;button&#x27;);button.type=&#x27;button&#x27;;button.className=&#x27;game-button cursor-interaction&#x27;+(action===&#x27;accept&#x27;?&#x27;&#x27;:&#x27; secondary-button&#x27;);button.textContent=title;
             button.dataset.requestId=String(request.id);button.dataset.action=action;
             button.addEventListener(&#x27;click&#x27;,()=&gt;decideTrade(request.id,action));row.appendChild(button);
           });
-          if(recipient(request)===activePlayer) {
+          if(!getPlayer(responder).cpu) {
             const editor=document.createElement(&#x27;details&#x27;);
             editor.className=&#x27;counter-editor&#x27;;
             const summary=document.createElement(&#x27;summary&#x27;);
@@ -2275,11 +2321,11 @@ html&gt;body{padding:0}&lt;/style&gt;
         });
       }
       function endTurn() {
-        if(!gameStarted||turnPhase!==&#x27;action&#x27;) return;
+        if(!gameStarted||turnPhase!==&#x27;action&#x27;||pendingPurchase()) return;
         syncPlayer();
         const index=players.findIndex(player=&gt;player.id===activePlayer);
         activePlayer=players[(index+1)%players.length].id;
-        loadPlayer();lastRoll=0;lastDice=[0,0];turnPhase=&#x27;roll&#x27;;
+        loadPlayer();leftProperty=false;lastRoll=0;lastDice=[0,0];turnPhase=&#x27;roll&#x27;;
         selectedAnimal=animalGroups[track[position]]?track[position]:null;
         tradeOpen=requests.some(request=&gt;recipient(request)===activePlayer);
         tradeMessage=&#x27;&#x27;;turnMessage=playerName(activePlayer)+&#x27;’s turn. Roll the dice.&#x27;;
@@ -2324,7 +2370,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           cpu:slot.querySelector(&#x27;select&#x27;).value===&#x27;cpu&#x27;,position:0,cash:2000,owned:[],lastRoll:0
         }));
         activePlayer=1;loadPlayer();lastDice=[0,0];
-        selectedAnimal=null;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage=&#x27;&#x27;;turnPhase=&#x27;roll&#x27;;gameStarted=true;hasSavedGame=true;
+        selectedAnimal=null;tradeBulletin=&#x27;&#x27;;leftProperty=false;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage=&#x27;&#x27;;turnPhase=&#x27;roll&#x27;;gameStarted=true;hasSavedGame=true;
         turnMessage=playerName(1)+&#x27;’s turn. Everyone starts on Go. Roll the dice.&#x27;;
         render();saveState();
       }
@@ -2397,11 +2443,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         board.appendChild(element);
       });
       sides.forEach((side,index)=&gt;{
-        const section=document.createElement(&#x27;section&#x27;);
-        section.className=&#x27;mobile-section&#x27;;
-        const heading=document.createElement(&#x27;h3&#x27;); heading.className=&#x27;mobile-heading&#x27;; heading.textContent=side.heading;
-        const cells=document.createElement(&#x27;div&#x27;); cells.className=&#x27;mobile-spaces&#x27;;
-        section.append(heading,cells); mobile.appendChild(section);
+        const cells=mobile.querySelector(&#x27;.mobile-track&#x27;);
         cells.appendChild(cell(cornerNames[index],false,null,index*10,true));
         side.names.forEach((name,i)=&gt;{
           const position=[[10-i,11],[1,10-i],[i+2,1],[11,i+2]][index];
@@ -2413,15 +2455,16 @@ html&gt;body{padding:0}&lt;/style&gt;
         });
       });
       function takeCpuTurn() {
-        if(!gameStarted||!getPlayer(activePlayer)?.cpu||turnPhase===&#x27;rolling&#x27;) return;
-        const offer=requests.find(request=&gt;recipient(request)===activePlayer);
+        if(!gameStarted||turnPhase===&#x27;rolling&#x27;) return;
+        const offer=requests.find(request=&gt;getPlayer(recipient(request)).cpu);
         if(offer) {
           const value=purchasePrice(offer.animal);
-          const buying=offer.buyer===activePlayer;
-          const acceptable=buying?offer.amount&lt;=value &amp;&amp; offer.amount&lt;=cash:offer.amount&gt;=value;
+          const buying=offer.buyer===recipient(offer);
+          const acceptable=buying?offer.amount&lt;=value &amp;&amp; offer.amount&lt;=getPlayer(offer.buyer).cash:offer.amount&gt;=value;
           decideTrade(offer.id,acceptable?&#x27;accept&#x27;:&#x27;decline&#x27;);
           return;
         }
+        if(!getPlayer(activePlayer).cpu) return;
         if(turnPhase===&#x27;roll&#x27;) {
           roll();
           return;
@@ -2431,6 +2474,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           buy(name);
           return;
         }
+        leftProperty=true;
         endTurn();
       }
       function render() {
@@ -2440,7 +2484,15 @@ html&gt;body{padding:0}&lt;/style&gt;
         root.querySelector(&#x27;.continue-game&#x27;).hidden=!hasSavedGame||players.length&lt;2;
         root.querySelector(&#x27;.continue-game&#x27;).textContent=&#x27;Continue saved game (&#x27;+players.length+&#x27; players)&#x27;;
         root.querySelector(&#x27;.roll-button&#x27;).disabled=!gameStarted||turnPhase!==&#x27;roll&#x27;;
-        root.querySelector(&#x27;.end-turn&#x27;).disabled=!gameStarted||turnPhase!==&#x27;action&#x27;;
+        root.querySelector(&#x27;.end-turn&#x27;).disabled=!gameStarted||turnPhase!==&#x27;action&#x27;||Boolean(pendingPurchase());
+        const choice=root.querySelector(&#x27;.landing-choice&#x27;);
+        choice.hidden=!pendingPurchase()||getPlayer(activePlayer).cpu;
+        if(!choice.hidden) {
+          const name=track[position],price=purchasePrice(name);
+          const button=choice.querySelector(&#x27;.landing-buy&#x27;);
+          button.textContent=&#x27;Buy &#x27;+name+&#x27; · &#x27;+money(price);
+          button.disabled=cash&lt;price;
+        }
         allTiles.forEach(tile=&gt;{
           const isCurrent=Number(tile.dataset.index)===position;
           const occupants=players.filter(player=&gt;player.position===Number(tile.dataset.index));
@@ -2456,7 +2508,9 @@ html&gt;body{padding:0}&lt;/style&gt;
           const rent=money(data.baseRent);
           button.querySelector(&#x27;.rent-label&#x27;).textContent=&#x27;Rent &#x27;+rent;
           const owner=ownerOf(button.dataset.name);
-          button.querySelector(&#x27;.owned-mark&#x27;).hidden=owner===null;
+          const badge=button.querySelector(&#x27;.owned-mark&#x27;);
+          badge.hidden=owner===null;
+          badge.textContent=owner===null?&#x27;&#x27;:playerName(owner);
           button.setAttribute(&#x27;aria-label&#x27;,button.dataset.name+&#x27;, &#x27;+button.dataset.group+&#x27; group, buy &#x27;+money(purchasePrice(button.dataset.name))+&#x27;, no houses rent &#x27;+rent+&#x27;, &#x27;+money(data.price)+&#x27; per house, &#x27;+(owner!==null?&#x27;owned by &#x27;+playerName(owner):&#x27;unowned&#x27;)+(Number(button.dataset.index)===position?&#x27;, &#x27;+playerName(activePlayer)+&#x27; is here&#x27;:&#x27;&#x27;)+(button.dataset.draft===&#x27;true&#x27;?&#x27;, provisional position&#x27;:&#x27;&#x27;));
         });
         root.querySelector(&#x27;.subtitle&#x27;).textContent=playerName(activePlayer)+&#x27;’s turn · &#x27;+(turnPhase===&#x27;roll&#x27;?&#x27;Roll the dice&#x27;:&#x27;Buy or trade, then End turn&#x27;);
@@ -2485,6 +2539,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           roster.append(entry);
         });
         root.querySelector(&#x27;.turn-status&#x27;).textContent=turnMessage;
+        if(gameStarted &amp;&amp; mobile.offsetWidth) centerMobileTile(position);
         refreshPanel();
         renderTrades();
         clearTimeout(cpuTimer);
@@ -2492,11 +2547,11 @@ html&gt;body{padding:0}&lt;/style&gt;
         for(const selector of [&#x27;.play-controls&#x27;,&#x27;.trade-panel&#x27;,&#x27;.trade-notice&#x27;,&#x27;.board&#x27;,&#x27;.mobile&#x27;]) {
           root.querySelector(selector).inert=cpuTurn;
         }
-        if(cpuTurn) cpuTimer=setTimeout(takeCpuTurn,850);
+        if(gameStarted&amp;&amp;(cpuTurn||requests.some(r=&gt;getPlayer(recipient(r)).cpu))) cpuTimer=setTimeout(takeCpuTurn,850);
       }
       function saveState() {
         syncPlayer();
-        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=&gt;({...player,owned:[...player.owned]})),requests:requests.map(request=&gt;({...request})),tradeOpen},privateContent:null}).catch(()=&gt;{});
+        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,leftProperty,tradeBulletin,turnMessage,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=&gt;({...player,owned:[...player.owned]})),requests:requests.map(request=&gt;({...request})),tradeOpen},privateContent:null}).catch(()=&gt;{});
       }
       function applyState(state) {
         if(state?.selectedAnimal===null||animalGroups[state?.selectedAnimal]) selectedAnimal=state.selectedAnimal;
@@ -2517,7 +2572,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             id:player.id,cpu:player.cpu===true,
             name:typeof player.name===&#x27;string&#x27;?player.name.trim():&#x27;&#x27;,
             position:Number.isInteger(player.position)&amp;&amp;player.position&gt;=0&amp;&amp;player.position&lt;40?player.position:0,
-            cash:Number.isSafeInteger(player.cash)&amp;&amp;player.cash&gt;=0?player.cash:2000,
+            cash:Number.isSafeInteger(player.cash)?player.cash:2000,
             lastRoll:Number.isInteger(player.lastRoll)&amp;&amp;player.lastRoll&gt;=0&amp;&amp;player.lastRoll&lt;=12?player.lastRoll:0,
             owned:(Array.isArray(player.owned)?player.owned:[]).filter(name=&gt;{
               if(!Object.hasOwn(animalGroups,name)||seenAnimals.has(name)) return false;
@@ -2535,13 +2590,15 @@ html&gt;body{padding:0}&lt;/style&gt;
             }).map(request=&gt;({id:request.id,counter:request.counter===true,kind:request.kind===&#x27;sell&#x27;?&#x27;sell&#x27;:&#x27;buy&#x27;,buyer:request.buyer,seller:request.seller,animal:request.animal,amount:request.amount}));
             nextRequestId=Math.max(0,...requests.map(request=&gt;request.id))+1;
             tradeOpen=Boolean(state.tradeOpen);
+            leftProperty=state.leftProperty===true;
+            tradeBulletin=typeof state.tradeBulletin===&#x27;string&#x27;?state.tradeBulletin:&#x27;&#x27;;
             hasSavedGame=true;
             gameStarted=state.gameVersion===3&amp;&amp;state.gameStarted===true&amp;&amp;players.length&gt;=2;
             turnPhase=state.gameVersion===3&amp;&amp;state.turnPhase===&#x27;action&#x27;?&#x27;action&#x27;:&#x27;roll&#x27;;
             lastDice=turnPhase===&#x27;action&#x27;&amp;&amp;Array.isArray(state.lastDice)&amp;&amp;state.lastDice.length===2&amp;&amp;state.lastDice.every(value=&gt;Number.isInteger(value)&amp;&amp;value&gt;=1&amp;&amp;value&lt;=6)&amp;&amp;state.lastDice[0]+state.lastDice[1]===lastRoll?[...state.lastDice]:[0,0];
             countControl.value=String(Math.max(2,players.length));
             if(!gameStarted) updateNameFields();
-            turnMessage=playerName(activePlayer)+&#x27;’s turn. &#x27;+(turnPhase===&#x27;action&#x27;?&#x27;Finish your action, then End turn.&#x27;:&#x27;Roll the dice.&#x27;);
+            turnMessage=typeof state.turnMessage===&#x27;string&#x27;?state.turnMessage:playerName(activePlayer)+&#x27;’s turn. &#x27;+(turnPhase===&#x27;action&#x27;?&#x27;Finish your action, then End turn.&#x27;:&#x27;Roll the dice.&#x27;);
           }
         }
         render();
@@ -2556,6 +2613,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         root.querySelector(&#x27;.setup-message&#x27;).textContent=&#x27;Starting a new game replaces the saved game.&#x27;;
         render();
         nameFields.querySelector(&#x27;input&#x27;).focus();
+      });
+      root.querySelector(&#x27;.landing-buy&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;buy(track[position]));
+      root.querySelector(&#x27;.leave&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{
+        if(!pendingPurchase()) return;
+        leftProperty=true;
+        turnMessage=playerName(activePlayer)+&#x27; left &#x27;+track[position]+&#x27; unowned.&#x27;;
+        render();saveState();
       });
       root.querySelector(&#x27;.roll-button&#x27;).addEventListener(&#x27;click&#x27;,roll);
       root.querySelector(&#x27;.end-turn&#x27;).addEventListener(&#x27;click&#x27;,endTurn);
