@@ -1808,6 +1808,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .side-top { padding:5px 2px 15px; }
     #animal-monopoly-map .side-top::before { inset:auto 0 0; }
     #animal-monopoly-map .corner { background:var(--soft); padding:8px; font-size:15px; }
+    #animal-monopoly-map .visitors { display:block; border:1px solid var(--line); border-radius:3px; padding:2px 5px; background:var(--tile); font-size:10px; line-height:1.15; }
     #animal-monopoly-map .corner::before,#animal-monopoly-map .mystery::before { display:none; }
     #animal-monopoly-map .mystery { font-weight:400; }
     #animal-monopoly-map .space[data-group] { background:var(--group); color:#111; padding:6px 3px; }
@@ -1853,7 +1854,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .roster-player { padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--tile); }
     #animal-monopoly-map .roster-player header { display:flex; align-items:center; gap:8px; font-weight:650; }
     #animal-monopoly-map .roster-player strong { display:block; margin:5px 0; font-size:clamp(26px,4vw,44px); line-height:1.15; font-variant-numeric:tabular-nums; }
-    #animal-monopoly-map .roster-player ul { margin:4px 0 0; padding-left:1.2em; }
+    #animal-monopoly-map .property-groups { margin:4px 0 0; font-size:13px; }
+    #animal-monopoly-map .property-groups dt { margin-top:4px; padding-left:6px; border-left:6px solid var(--group); font-weight:700; }
+    #animal-monopoly-map .property-groups dd { margin:1px 0 4px 12px; }
     #animal-monopoly-map .roster-player.active { border-color:var(--ink); background:var(--soft); }
     #animal-monopoly-map .setup { padding:24px; background:var(--paper); border:1px solid var(--line); border-radius:10px; }
     #animal-monopoly-map .setup-form { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:16px 0; }
@@ -1884,7 +1887,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .request-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; border-top:1px solid var(--line); padding:10px 0; }
     #animal-monopoly-map .request-text { flex:1 1 220px; font-size:13px; }
     #animal-monopoly-map .bulletin { background:var(--soft); border-left:4px solid #528460; padding:8px 12px; }
-    #animal-monopoly-map .roster-player ul { max-height:3.5em; overflow:auto; }
+    #animal-monopoly-map .property-groups { max-height:6em; overflow:auto; }
     #animal-monopoly-map .board .space[data-group] { padding:2px; gap:0; }
     #animal-monopoly-map .side-left .rent-label,#animal-monopoly-map .side-right .rent-label { font-size:10px; }
     #animal-monopoly-map .turn-status { margin:4px 0; }
@@ -1978,6 +1981,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const multipliers=[1,2,4,6,8,10];
       const cornerNames=[&#x27;Go&#x27;,&#x27;Jail&#x27;,&#x27;$500&#x27;,&#x27;Go to Jail&#x27;];
       const track=sides.flatMap((side,i)=&gt;[cornerNames[i],...side.names]);
+      const jailIndex=track.indexOf(&#x27;Jail&#x27;);
       let selectedAnimal=null;
       let position=0;
       let cash=2000;
@@ -1995,6 +1999,25 @@ html&gt;body{padding:0}&lt;/style&gt;
       let hasSavedGame=false;
       let tradeBulletin=&#x27;&#x27;;
       let leftProperty=false;
+      const mysteryCards=[
+        [&#x27;Your lost parrot comes home with a reward tag.&#x27;, 50],
+        [&#x27;Your wildlife photo wins first prize.&#x27;, 100],
+        [&#x27;The sanctuary receives a conservation grant.&#x27;, 150],
+        [&#x27;Your penguin postcards sell out.&#x27;, 60],
+        [&#x27;You guide a birdwatching tour.&#x27;, 40],
+        [&#x27;The zoo buys your butterfly illustrations.&#x27;, 80],
+        [&#x27;Visitors donate to your turtle rescue.&#x27;, 70],
+        [&#x27;Your animal calendar earns royalties.&#x27;, 50],
+        [&#x27;A storm damages the aviary roof.&#x27;, -100],
+        [&#x27;The otters need a new pool filter.&#x27;, -80],
+        [&#x27;Buy winter bedding for the bears.&#x27;, -50],
+        [&#x27;Pay the vet for a hedgehog checkup.&#x27;, -40],
+        [&#x27;Restock the elephant feed shed.&#x27;, -90],
+        [&#x27;Repair the fence around the giraffe paddock.&#x27;, -120],
+        [&#x27;Replace the ropes in the monkey enclosure.&#x27;, -60]
+      ];
+      let mysteryDeck=[];
+      let drawnCard=null;
       let turnPhase=&#x27;roll&#x27;;
       let cpuTimer;
       const money=value=&gt;&#x27;$&#x27;+value.toLocaleString(&#x27;en-US&#x27;);
@@ -2048,7 +2071,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         selectedAnimal=null;
         const name=track[position];
         buttons.forEach(button=&gt;{button.classList.toggle(&#x27;is-related&#x27;,false);button.setAttribute(&#x27;aria-pressed&#x27;,&#x27;false&#x27;);});
-        const description={Go:&#x27;Collect $200 each time your move reaches or passes Go.&#x27;,Jail:&#x27;Jail and release rules still need to be set.&#x27;,&#x27;$500&#x27;:&#x27;Collect $500 when you land here.&#x27;,&#x27;Go to Jail&#x27;:&#x27;Jail movement is not active in this preview.&#x27;,&#x27;Mystery Card&#x27;:&#x27;15 cards proposed. Card drawing is not active in this preview.&#x27;}[name];
+        const description={Go:&#x27;Collect $200 each time your move reaches or passes Go.&#x27;,Jail:getPlayer(activePlayer).jailed?&#x27;In jail. Your next turn will be skipped.&#x27;:&#x27;Just visiting. Your next turn proceeds normally.&#x27;,&#x27;$500&#x27;:&#x27;Collect $500 when you land here.&#x27;,&#x27;Go to Jail&#x27;:&#x27;Move directly to Jail and skip your next turn.&#x27;,&#x27;Mystery Card&#x27;:drawnCard===null?&#x27;Draw a card when you land here.&#x27;:describeCard(drawnCard)}[name];
         panels.forEach(panel=&gt;{
           panel.innerHTML=&#x27;&lt;h3 class=&quot;detail-title&quot;&gt;&#x27;+name+&#x27;&lt;/h3&gt;&lt;p&gt;&#x27;+description+&#x27;&lt;/p&gt;&lt;div class=&quot;detail-meta&quot;&gt;&lt;span class=&quot;current-name&quot;&gt;&lt;/span&gt; · &#x27;+money(cash)+&#x27; · &#x27;+owned.size+&#x27; animals owned&lt;/div&gt;&#x27;;
           panel.querySelector(&#x27;.current-name&#x27;).textContent=playerName(activePlayer);
@@ -2079,12 +2102,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         const tile=strip.querySelector(&#x27;[data-index=&quot;&#x27;+index+&#x27;&quot;]&#x27;);
         strip.scrollLeft+=tile.getBoundingClientRect().left-strip.getBoundingClientRect().left-(strip.clientWidth-tile.offsetWidth)/2;
       }
-      async function movePiece(from,to) {
+      async function movePiece(from,to,toJail=false) {
         const animations=[];
         for(const layout of [board,mobile]) {
-          const source=layout.querySelector(&#x27;[data-index=&quot;&#x27;+from+&#x27;&quot;] .pieces&#x27;);
-          const target=layout.querySelector(&#x27;[data-index=&quot;&#x27;+to+&#x27;&quot;] .pieces&#x27;);
-          const piece=source.querySelector(&#x27;.is-active&#x27;);
+          const piece=layout.querySelector(&#x27;[data-index=&quot;&#x27;+from+&#x27;&quot;] .piece.is-active&#x27;);
+          const source=piece.parentElement;
+          const destination=layout.querySelector(&#x27;[data-index=&quot;&#x27;+to+&#x27;&quot;]&#x27;);
+          const target=destination.querySelector(to===jailIndex &amp;&amp; !toJail?&#x27;.visitors .pieces&#x27;:&#x27;.pieces&#x27;);
           const before=piece.getBoundingClientRect();
           target.hidden=false;
           target.append(piece);
@@ -2127,10 +2151,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         for(let step=0;step&lt;lastRoll;step++) {
           await movePiece((position+step)%track.length,(position+step+1)%track.length);
         }
+        const landing=nextPosition%track.length;
+        if(track[landing]===&#x27;Go to Jail&#x27;) {
+          await movePiece(landing,jailIndex,true);
+        }
         content.inert=false;
         leftProperty=false;
         cash+=goBonus;
-        position=nextPosition%track.length;
+        position=landing;
         turnPhase=&#x27;action&#x27;;
         const name=track[position];
         selectedAnimal=animalGroups[name]?name:null;
@@ -2139,7 +2167,29 @@ html&gt;body{padding:0}&lt;/style&gt;
         render();
         saveState();
       }
+      function describeCard(index) {
+        const [story,amount]=mysteryCards[index];
+        return story+&#x27; &#x27;+(amount&gt;0?&#x27;Collect &#x27;:&#x27;Pay &#x27;)+money(Math.abs(amount))+&#x27;.&#x27;;
+      }
+      function drawMysteryCard() {
+        if(!mysteryDeck.length) {
+          mysteryDeck=mysteryCards.map((_,index)=&gt;index);
+          for(let i=mysteryDeck.length-1;i&gt;0;i--) {
+            const j=Math.floor(Math.random()*(i+1));
+            [mysteryDeck[i],mysteryDeck[j]]=[mysteryDeck[j],mysteryDeck[i]];
+          }
+        }
+        drawnCard=mysteryDeck.pop();
+        cash+=mysteryCards[drawnCard][1];
+        return &#x27; &#x27;+describeCard(drawnCard);
+      }
       function settleLanding(name) {
+        if(name===&#x27;Go to Jail&#x27;) {
+          getPlayer(activePlayer).jailed=true;
+          position=jailIndex;
+          return &#x27; Moved to Jail. Next turn will be skipped.&#x27;;
+        }
+        if(name===&#x27;Mystery Card&#x27;) return drawMysteryCard();
         if(name===&#x27;$500&#x27;) {
           cash+=500;
           return &#x27; Collected $500.&#x27;;
@@ -2323,12 +2373,20 @@ html&gt;body{padding:0}&lt;/style&gt;
       function endTurn() {
         if(!gameStarted||turnPhase!==&#x27;action&#x27;||pendingPurchase()) return;
         syncPlayer();
-        const index=players.findIndex(player=&gt;player.id===activePlayer);
-        activePlayer=players[(index+1)%players.length].id;
-        loadPlayer();leftProperty=false;lastRoll=0;lastDice=[0,0];turnPhase=&#x27;roll&#x27;;
+        let index=players.findIndex(player=&gt;player.id===activePlayer);
+        const skipped=[];
+        while(true) {
+          index=(index+1)%players.length;
+          const next=players[index];
+          if(!next.jailed) break;
+          next.jailed=false;
+          skipped.push(playerName(next.id)+&#x27; skipped a turn in Jail.&#x27;);
+        }
+        activePlayer=players[index].id;
+        loadPlayer();drawnCard=null;leftProperty=false;lastRoll=0;lastDice=[0,0];turnPhase=&#x27;roll&#x27;;
         selectedAnimal=animalGroups[track[position]]?track[position]:null;
         tradeOpen=requests.some(request=&gt;recipient(request)===activePlayer);
-        tradeMessage=&#x27;&#x27;;turnMessage=playerName(activePlayer)+&#x27;’s turn. Roll the dice.&#x27;;
+        tradeMessage=&#x27;&#x27;;turnMessage=[...skipped,playerName(activePlayer)+&#x27;’s turn. Roll the dice.&#x27;].join(&#x27; &#x27;);
         render();saveState();
       }
       const nameFields=root.querySelector(&#x27;.player-names&#x27;);
@@ -2370,7 +2428,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           cpu:slot.querySelector(&#x27;select&#x27;).value===&#x27;cpu&#x27;,position:0,cash:2000,owned:[],lastRoll:0
         }));
         activePlayer=1;loadPlayer();lastDice=[0,0];
-        selectedAnimal=null;tradeBulletin=&#x27;&#x27;;leftProperty=false;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage=&#x27;&#x27;;turnPhase=&#x27;roll&#x27;;gameStarted=true;hasSavedGame=true;
+        selectedAnimal=null;mysteryDeck=[];drawnCard=null;tradeBulletin=&#x27;&#x27;;leftProperty=false;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage=&#x27;&#x27;;turnPhase=&#x27;roll&#x27;;gameStarted=true;hasSavedGame=true;
         turnMessage=playerName(1)+&#x27;’s turn. Everyone starts on Go. Roll the dice.&#x27;;
         render();saveState();
       }
@@ -2432,6 +2490,12 @@ html&gt;body{padding:0}&lt;/style&gt;
         const pieces=document.createElement(&#x27;span&#x27;);
         pieces.className=&#x27;pieces&#x27;;pieces.hidden=true;
         element.appendChild(pieces);
+        if(name===&#x27;Jail&#x27;) {
+          const box=document.createElement(&#x27;span&#x27;);
+          box.className=&#x27;visitors&#x27;;
+          box.append(&#x27;Just visiting&#x27;,pieces.cloneNode(false));
+          element.append(box);
+        }
         allTiles.push(element);
         return element;
       }
@@ -2497,8 +2561,15 @@ html&gt;body{padding:0}&lt;/style&gt;
           const isCurrent=Number(tile.dataset.index)===position;
           const occupants=players.filter(player=&gt;player.position===Number(tile.dataset.index));
           const pieces=tile.querySelector(&#x27;.pieces&#x27;);
-          pieces.replaceChildren();pieces.hidden=occupants.length===0;
-          occupants.forEach(player=&gt;pieces.appendChild(createPiece(player)));
+          const visitors=tile.querySelector(&#x27;.visitors .pieces&#x27;);
+          if(visitors) visitors.replaceChildren();
+          pieces.replaceChildren();
+          for(const player of occupants) {
+            const area=visitors &amp;&amp; !player.jailed?visitors:pieces;
+            area.appendChild(createPiece(player));
+          }
+          pieces.hidden=!pieces.childElementCount;
+          if(visitors) visitors.hidden=!visitors.childElementCount;
           tile.setAttribute(&#x27;aria-current&#x27;,isCurrent?&#x27;location&#x27;:&#x27;false&#x27;);
           tile.setAttribute(&#x27;data-occupants&#x27;,occupants.map(player=&gt;player.id).join(&#x27;,&#x27;));
           if(!animalGroups[tile.dataset.name]) tile.setAttribute(&#x27;aria-label&#x27;,tile.dataset.name+(occupants.length?&#x27;, Pieces: &#x27;+occupants.map(player=&gt;playerName(player.id)).join(&#x27;, &#x27;):&#x27;&#x27;));
@@ -2526,13 +2597,20 @@ html&gt;body{padding:0}&lt;/style&gt;
           title.append(createPiece(player),playerName(player.id)+(player.cpu?&#x27; (CPU)&#x27;:&#x27;&#x27;)+(active?&#x27; · Your turn&#x27;:&#x27;&#x27;));
           const balance=document.createElement(&#x27;strong&#x27;);
           balance.textContent=money(player.cash);
-          entry.append(title,balance,player.owned.length?&#x27;Properties&#x27;:&#x27;No properties yet&#x27;);
-          if(player.owned.length) {
-            const list=document.createElement(&#x27;ul&#x27;);
-            for(const name of player.owned) {
-              const item=document.createElement(&#x27;li&#x27;);
-              item.textContent=name;
-              list.append(item);
+          const count=player.owned.length;
+          entry.append(title,balance,count+&#x27; &#x27;+(count===1?&#x27;property&#x27;:&#x27;properties&#x27;));
+          if(count) {
+            const list=document.createElement(&#x27;dl&#x27;);
+            list.className=&#x27;property-groups&#x27;;
+            for(const [color,group] of Object.entries(groups)) {
+              const properties=group.animals.filter(name=&gt;player.owned.includes(name));
+              if(!properties.length) continue;
+              const heading=document.createElement(&#x27;dt&#x27;);
+              heading.textContent=color;
+              heading.style.setProperty(&#x27;--group&#x27;,group.color);
+              const names=document.createElement(&#x27;dd&#x27;);
+              names.textContent=properties.join(&#x27;, &#x27;);
+              list.append(heading,names);
             }
             entry.append(list);
           }
@@ -2551,7 +2629,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
       function saveState() {
         syncPlayer();
-        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,leftProperty,tradeBulletin,turnMessage,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=&gt;({...player,owned:[...player.owned]})),requests:requests.map(request=&gt;({...request})),tradeOpen},privateContent:null}).catch(()=&gt;{});
+        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,mysteryDeck:[...mysteryDeck],drawnCard,leftProperty,tradeBulletin,turnMessage,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=&gt;({...player,owned:[...player.owned]})),requests:requests.map(request=&gt;({...request})),tradeOpen},privateContent:null}).catch(()=&gt;{});
       }
       function applyState(state) {
         if(state?.selectedAnimal===null||animalGroups[state?.selectedAnimal]) selectedAnimal=state.selectedAnimal;
@@ -2569,7 +2647,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             if(!player||!Number.isSafeInteger(player.id)||player.id&lt;1||seenIds.has(player.id)) return false;
             seenIds.add(player.id);return true;
           }).map(player=&gt;({
-            id:player.id,cpu:player.cpu===true,
+            id:player.id,cpu:player.cpu===true,jailed:player.position===jailIndex &amp;&amp; player.jailed===true,
             name:typeof player.name===&#x27;string&#x27;?player.name.trim():&#x27;&#x27;,
             position:Number.isInteger(player.position)&amp;&amp;player.position&gt;=0&amp;&amp;player.position&lt;40?player.position:0,
             cash:Number.isSafeInteger(player.cash)?player.cash:2000,
@@ -2590,6 +2668,9 @@ html&gt;body{padding:0}&lt;/style&gt;
             }).map(request=&gt;({id:request.id,counter:request.counter===true,kind:request.kind===&#x27;sell&#x27;?&#x27;sell&#x27;:&#x27;buy&#x27;,buyer:request.buyer,seller:request.seller,animal:request.animal,amount:request.amount}));
             nextRequestId=Math.max(0,...requests.map(request=&gt;request.id))+1;
             tradeOpen=Boolean(state.tradeOpen);
+            const validCard=index=&gt;Number.isInteger(index)&amp;&amp;index&gt;=0&amp;&amp;index&lt;mysteryCards.length;
+            mysteryDeck=Array.isArray(state.mysteryDeck)?[...new Set(state.mysteryDeck.filter(validCard))]:[];
+            drawnCard=validCard(state.drawnCard)?state.drawnCard:null;
             leftProperty=state.leftProperty===true;
             tradeBulletin=typeof state.tradeBulletin===&#x27;string&#x27;?state.tradeBulletin:&#x27;&#x27;;
             hasSavedGame=true;

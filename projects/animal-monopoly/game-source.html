@@ -20,6 +20,7 @@
     #animal-monopoly-map .side-top { padding:5px 2px 15px; }
     #animal-monopoly-map .side-top::before { inset:auto 0 0; }
     #animal-monopoly-map .corner { background:var(--soft); padding:8px; font-size:15px; }
+    #animal-monopoly-map .visitors { display:block; border:1px solid var(--line); border-radius:3px; padding:2px 5px; background:var(--tile); font-size:10px; line-height:1.15; }
     #animal-monopoly-map .corner::before,#animal-monopoly-map .mystery::before { display:none; }
     #animal-monopoly-map .mystery { font-weight:400; }
     #animal-monopoly-map .space[data-group] { background:var(--group); color:#111; padding:6px 3px; }
@@ -65,7 +66,9 @@
     #animal-monopoly-map .roster-player { padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--tile); }
     #animal-monopoly-map .roster-player header { display:flex; align-items:center; gap:8px; font-weight:650; }
     #animal-monopoly-map .roster-player strong { display:block; margin:5px 0; font-size:clamp(26px,4vw,44px); line-height:1.15; font-variant-numeric:tabular-nums; }
-    #animal-monopoly-map .roster-player ul { margin:4px 0 0; padding-left:1.2em; }
+    #animal-monopoly-map .property-groups { margin:4px 0 0; font-size:13px; }
+    #animal-monopoly-map .property-groups dt { margin-top:4px; padding-left:6px; border-left:6px solid var(--group); font-weight:700; }
+    #animal-monopoly-map .property-groups dd { margin:1px 0 4px 12px; }
     #animal-monopoly-map .roster-player.active { border-color:var(--ink); background:var(--soft); }
     #animal-monopoly-map .setup { padding:24px; background:var(--paper); border:1px solid var(--line); border-radius:10px; }
     #animal-monopoly-map .setup-form { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:16px 0; }
@@ -96,7 +99,7 @@
     #animal-monopoly-map .request-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; border-top:1px solid var(--line); padding:10px 0; }
     #animal-monopoly-map .request-text { flex:1 1 220px; font-size:13px; }
     #animal-monopoly-map .bulletin { background:var(--soft); border-left:4px solid #528460; padding:8px 12px; }
-    #animal-monopoly-map .roster-player ul { max-height:3.5em; overflow:auto; }
+    #animal-monopoly-map .property-groups { max-height:6em; overflow:auto; }
     #animal-monopoly-map .board .space[data-group] { padding:2px; gap:0; }
     #animal-monopoly-map .side-left .rent-label,#animal-monopoly-map .side-right .rent-label { font-size:10px; }
     #animal-monopoly-map .turn-status { margin:4px 0; }
@@ -190,6 +193,7 @@
       const multipliers=[1,2,4,6,8,10];
       const cornerNames=['Go','Jail','$500','Go to Jail'];
       const track=sides.flatMap((side,i)=>[cornerNames[i],...side.names]);
+      const jailIndex=track.indexOf('Jail');
       let selectedAnimal=null;
       let position=0;
       let cash=2000;
@@ -207,6 +211,25 @@
       let hasSavedGame=false;
       let tradeBulletin='';
       let leftProperty=false;
+      const mysteryCards=[
+        ['Your lost parrot comes home with a reward tag.', 50],
+        ['Your wildlife photo wins first prize.', 100],
+        ['The sanctuary receives a conservation grant.', 150],
+        ['Your penguin postcards sell out.', 60],
+        ['You guide a birdwatching tour.', 40],
+        ['The zoo buys your butterfly illustrations.', 80],
+        ['Visitors donate to your turtle rescue.', 70],
+        ['Your animal calendar earns royalties.', 50],
+        ['A storm damages the aviary roof.', -100],
+        ['The otters need a new pool filter.', -80],
+        ['Buy winter bedding for the bears.', -50],
+        ['Pay the vet for a hedgehog checkup.', -40],
+        ['Restock the elephant feed shed.', -90],
+        ['Repair the fence around the giraffe paddock.', -120],
+        ['Replace the ropes in the monkey enclosure.', -60]
+      ];
+      let mysteryDeck=[];
+      let drawnCard=null;
       let turnPhase='roll';
       let cpuTimer;
       const money=value=>'$'+value.toLocaleString('en-US');
@@ -260,7 +283,7 @@
         selectedAnimal=null;
         const name=track[position];
         buttons.forEach(button=>{button.classList.toggle('is-related',false);button.setAttribute('aria-pressed','false');});
-        const description={Go:'Collect $200 each time your move reaches or passes Go.',Jail:'Jail and release rules still need to be set.','$500':'Collect $500 when you land here.','Go to Jail':'Jail movement is not active in this preview.','Mystery Card':'15 cards proposed. Card drawing is not active in this preview.'}[name];
+        const description={Go:'Collect $200 each time your move reaches or passes Go.',Jail:getPlayer(activePlayer).jailed?'In jail. Your next turn will be skipped.':'Just visiting. Your next turn proceeds normally.','$500':'Collect $500 when you land here.','Go to Jail':'Move directly to Jail and skip your next turn.','Mystery Card':drawnCard===null?'Draw a card when you land here.':describeCard(drawnCard)}[name];
         panels.forEach(panel=>{
           panel.innerHTML='<h3 class="detail-title">'+name+'</h3><p>'+description+'</p><div class="detail-meta"><span class="current-name"></span> · '+money(cash)+' · '+owned.size+' animals owned</div>';
           panel.querySelector('.current-name').textContent=playerName(activePlayer);
@@ -291,12 +314,13 @@
         const tile=strip.querySelector('[data-index="'+index+'"]');
         strip.scrollLeft+=tile.getBoundingClientRect().left-strip.getBoundingClientRect().left-(strip.clientWidth-tile.offsetWidth)/2;
       }
-      async function movePiece(from,to) {
+      async function movePiece(from,to,toJail=false) {
         const animations=[];
         for(const layout of [board,mobile]) {
-          const source=layout.querySelector('[data-index="'+from+'"] .pieces');
-          const target=layout.querySelector('[data-index="'+to+'"] .pieces');
-          const piece=source.querySelector('.is-active');
+          const piece=layout.querySelector('[data-index="'+from+'"] .piece.is-active');
+          const source=piece.parentElement;
+          const destination=layout.querySelector('[data-index="'+to+'"]');
+          const target=destination.querySelector(to===jailIndex && !toJail?'.visitors .pieces':'.pieces');
           const before=piece.getBoundingClientRect();
           target.hidden=false;
           target.append(piece);
@@ -339,10 +363,14 @@
         for(let step=0;step<lastRoll;step++) {
           await movePiece((position+step)%track.length,(position+step+1)%track.length);
         }
+        const landing=nextPosition%track.length;
+        if(track[landing]==='Go to Jail') {
+          await movePiece(landing,jailIndex,true);
+        }
         content.inert=false;
         leftProperty=false;
         cash+=goBonus;
-        position=nextPosition%track.length;
+        position=landing;
         turnPhase='action';
         const name=track[position];
         selectedAnimal=animalGroups[name]?name:null;
@@ -351,7 +379,29 @@
         render();
         saveState();
       }
+      function describeCard(index) {
+        const [story,amount]=mysteryCards[index];
+        return story+' '+(amount>0?'Collect ':'Pay ')+money(Math.abs(amount))+'.';
+      }
+      function drawMysteryCard() {
+        if(!mysteryDeck.length) {
+          mysteryDeck=mysteryCards.map((_,index)=>index);
+          for(let i=mysteryDeck.length-1;i>0;i--) {
+            const j=Math.floor(Math.random()*(i+1));
+            [mysteryDeck[i],mysteryDeck[j]]=[mysteryDeck[j],mysteryDeck[i]];
+          }
+        }
+        drawnCard=mysteryDeck.pop();
+        cash+=mysteryCards[drawnCard][1];
+        return ' '+describeCard(drawnCard);
+      }
       function settleLanding(name) {
+        if(name==='Go to Jail') {
+          getPlayer(activePlayer).jailed=true;
+          position=jailIndex;
+          return ' Moved to Jail. Next turn will be skipped.';
+        }
+        if(name==='Mystery Card') return drawMysteryCard();
         if(name==='$500') {
           cash+=500;
           return ' Collected $500.';
@@ -535,12 +585,20 @@
       function endTurn() {
         if(!gameStarted||turnPhase!=='action'||pendingPurchase()) return;
         syncPlayer();
-        const index=players.findIndex(player=>player.id===activePlayer);
-        activePlayer=players[(index+1)%players.length].id;
-        loadPlayer();leftProperty=false;lastRoll=0;lastDice=[0,0];turnPhase='roll';
+        let index=players.findIndex(player=>player.id===activePlayer);
+        const skipped=[];
+        while(true) {
+          index=(index+1)%players.length;
+          const next=players[index];
+          if(!next.jailed) break;
+          next.jailed=false;
+          skipped.push(playerName(next.id)+' skipped a turn in Jail.');
+        }
+        activePlayer=players[index].id;
+        loadPlayer();drawnCard=null;leftProperty=false;lastRoll=0;lastDice=[0,0];turnPhase='roll';
         selectedAnimal=animalGroups[track[position]]?track[position]:null;
         tradeOpen=requests.some(request=>recipient(request)===activePlayer);
-        tradeMessage='';turnMessage=playerName(activePlayer)+'’s turn. Roll the dice.';
+        tradeMessage='';turnMessage=[...skipped,playerName(activePlayer)+'’s turn. Roll the dice.'].join(' ');
         render();saveState();
       }
       const nameFields=root.querySelector('.player-names');
@@ -582,7 +640,7 @@
           cpu:slot.querySelector('select').value==='cpu',position:0,cash:2000,owned:[],lastRoll:0
         }));
         activePlayer=1;loadPlayer();lastDice=[0,0];
-        selectedAnimal=null;tradeBulletin='';leftProperty=false;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage='';turnPhase='roll';gameStarted=true;hasSavedGame=true;
+        selectedAnimal=null;mysteryDeck=[];drawnCard=null;tradeBulletin='';leftProperty=false;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage='';turnPhase='roll';gameStarted=true;hasSavedGame=true;
         turnMessage=playerName(1)+'’s turn. Everyone starts on Go. Roll the dice.';
         render();saveState();
       }
@@ -644,6 +702,12 @@
         const pieces=document.createElement('span');
         pieces.className='pieces';pieces.hidden=true;
         element.appendChild(pieces);
+        if(name==='Jail') {
+          const box=document.createElement('span');
+          box.className='visitors';
+          box.append('Just visiting',pieces.cloneNode(false));
+          element.append(box);
+        }
         allTiles.push(element);
         return element;
       }
@@ -709,8 +773,15 @@
           const isCurrent=Number(tile.dataset.index)===position;
           const occupants=players.filter(player=>player.position===Number(tile.dataset.index));
           const pieces=tile.querySelector('.pieces');
-          pieces.replaceChildren();pieces.hidden=occupants.length===0;
-          occupants.forEach(player=>pieces.appendChild(createPiece(player)));
+          const visitors=tile.querySelector('.visitors .pieces');
+          if(visitors) visitors.replaceChildren();
+          pieces.replaceChildren();
+          for(const player of occupants) {
+            const area=visitors && !player.jailed?visitors:pieces;
+            area.appendChild(createPiece(player));
+          }
+          pieces.hidden=!pieces.childElementCount;
+          if(visitors) visitors.hidden=!visitors.childElementCount;
           tile.setAttribute('aria-current',isCurrent?'location':'false');
           tile.setAttribute('data-occupants',occupants.map(player=>player.id).join(','));
           if(!animalGroups[tile.dataset.name]) tile.setAttribute('aria-label',tile.dataset.name+(occupants.length?', Pieces: '+occupants.map(player=>playerName(player.id)).join(', '):''));
@@ -738,13 +809,20 @@
           title.append(createPiece(player),playerName(player.id)+(player.cpu?' (CPU)':'')+(active?' · Your turn':''));
           const balance=document.createElement('strong');
           balance.textContent=money(player.cash);
-          entry.append(title,balance,player.owned.length?'Properties':'No properties yet');
-          if(player.owned.length) {
-            const list=document.createElement('ul');
-            for(const name of player.owned) {
-              const item=document.createElement('li');
-              item.textContent=name;
-              list.append(item);
+          const count=player.owned.length;
+          entry.append(title,balance,count+' '+(count===1?'property':'properties'));
+          if(count) {
+            const list=document.createElement('dl');
+            list.className='property-groups';
+            for(const [color,group] of Object.entries(groups)) {
+              const properties=group.animals.filter(name=>player.owned.includes(name));
+              if(!properties.length) continue;
+              const heading=document.createElement('dt');
+              heading.textContent=color;
+              heading.style.setProperty('--group',group.color);
+              const names=document.createElement('dd');
+              names.textContent=properties.join(', ');
+              list.append(heading,names);
             }
             entry.append(list);
           }
@@ -763,7 +841,7 @@
       }
       function saveState() {
         syncPlayer();
-        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,leftProperty,tradeBulletin,turnMessage,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=>({...player,owned:[...player.owned]})),requests:requests.map(request=>({...request})),tradeOpen},privateContent:null}).catch(()=>{});
+        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,mysteryDeck:[...mysteryDeck],drawnCard,leftProperty,tradeBulletin,turnMessage,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=>({...player,owned:[...player.owned]})),requests:requests.map(request=>({...request})),tradeOpen},privateContent:null}).catch(()=>{});
       }
       function applyState(state) {
         if(state?.selectedAnimal===null||animalGroups[state?.selectedAnimal]) selectedAnimal=state.selectedAnimal;
@@ -781,7 +859,7 @@
             if(!player||!Number.isSafeInteger(player.id)||player.id<1||seenIds.has(player.id)) return false;
             seenIds.add(player.id);return true;
           }).map(player=>({
-            id:player.id,cpu:player.cpu===true,
+            id:player.id,cpu:player.cpu===true,jailed:player.position===jailIndex && player.jailed===true,
             name:typeof player.name==='string'?player.name.trim():'',
             position:Number.isInteger(player.position)&&player.position>=0&&player.position<40?player.position:0,
             cash:Number.isSafeInteger(player.cash)?player.cash:2000,
@@ -802,6 +880,9 @@
             }).map(request=>({id:request.id,counter:request.counter===true,kind:request.kind==='sell'?'sell':'buy',buyer:request.buyer,seller:request.seller,animal:request.animal,amount:request.amount}));
             nextRequestId=Math.max(0,...requests.map(request=>request.id))+1;
             tradeOpen=Boolean(state.tradeOpen);
+            const validCard=index=>Number.isInteger(index)&&index>=0&&index<mysteryCards.length;
+            mysteryDeck=Array.isArray(state.mysteryDeck)?[...new Set(state.mysteryDeck.filter(validCard))]:[];
+            drawnCard=validCard(state.drawnCard)?state.drawnCard:null;
             leftProperty=state.leftProperty===true;
             tradeBulletin=typeof state.tradeBulletin==='string'?state.tradeBulletin:'';
             hasSavedGame=true;
