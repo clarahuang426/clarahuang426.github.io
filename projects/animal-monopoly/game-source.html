@@ -6,9 +6,6 @@
     #animal-monopoly-map .space { border:0; margin:0; border-radius:0; padding:15px 3px 5px; position:relative; background:var(--tile); color:var(--ink); font:500 12px/1.25 system-ui,sans-serif; overflow-wrap:normal; display:flex; align-items:center; justify-content:center; text-align:center; }
     #animal-monopoly-map button.space { flex-direction:column; gap:3px; }
     #animal-monopoly-map .rent-label { font-size:11px; font-weight:400; white-space:normal; font-variant-numeric:tabular-nums; }
-    #animal-monopoly-map .rent-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; margin:0 0 12px; padding-right:90px; }
-    #animal-monopoly-map .rent-controls select { font:inherit; min-height:44px; padding:6px 10px; color:var(--ink); background:var(--tile); border:1px solid var(--line); border-radius:6px; }
-    #animal-monopoly-map .rent-status { flex-basis:100%; font-size:12px; }
     #animal-monopoly-map .rent-table { width:100%; max-width:270px; border-collapse:collapse; margin:6px auto; text-align:left; font-size:12px; }
     #animal-monopoly-map .rent-table th { font-weight:400; }
     #animal-monopoly-map .rent-table th,#animal-monopoly-map .rent-table td { padding:3px 6px; border-bottom:1px solid var(--line); }
@@ -25,9 +22,13 @@
     #animal-monopoly-map .corner { background:var(--soft); padding:8px; font-size:15px; }
     #animal-monopoly-map .corner::before,#animal-monopoly-map .mystery::before { display:none; }
     #animal-monopoly-map .mystery { font-weight:400; }
-    #animal-monopoly-map .space.is-related { background:color-mix(in srgb,var(--group) 18%,var(--tile)); }
+    #animal-monopoly-map .space[data-group] { background:var(--group); color:#111; padding:6px 3px; }
+    #animal-monopoly-map .space[data-group]::before { display:none; }
+    #animal-monopoly-map .space:is([data-group="Black"],[data-group="Brown"],[data-group="Dark blue"]) { color:white; }
+    #animal-monopoly-map .space .piece { background:#fff; border-radius:4px; color:#14251b; --ink:#14251b; }
+    #animal-monopoly-map .space .owned-mark { background:currentColor; }
     #animal-monopoly-map .space[aria-pressed="true"] { box-shadow:inset 0 0 0 2px var(--ink); }
-    #animal-monopoly-map .center { grid-column:2/11; grid-row:2/11; background:var(--paper); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:16px; gap:12px; }
+    #animal-monopoly-map .center { grid-column:2/11; grid-row:2/11; background:light-dark(#c7dfc8,#2c4939); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:16px; gap:12px; }
     #animal-monopoly-map .heading { font-size:22px; line-height:1.1; font-weight:500; letter-spacing:.04em; margin:0; }
     #animal-monopoly-map .subtitle { font-size:12px; margin:8px 0 0; }
     #animal-monopoly-map .deck { width:100px; min-height:65px; border:1px solid var(--line); border-radius:8px; display:flex; align-items:center; justify-content:center; background:var(--tile); transform:rotate(-7deg); font-size:14px; }
@@ -39,13 +40,18 @@
     #animal-monopoly-map .mobile-spaces { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); }
     #animal-monopoly-map .mobile-spaces .space { min-height:76px; }
     #animal-monopoly-map .mobile-detail { margin-bottom:12px; }
+    #animal-monopoly-map .trade-notice { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; margin-bottom:12px; border-left:5px solid #ce942d; background:var(--soft); }
+    #animal-monopoly-map .trade-notice[hidden] { display:none; }
+    #animal-monopoly-map .counter-editor { flex-basis:100%; }
+    #animal-monopoly-map .counter-editor input { width:7em; margin:6px; padding:8px; font:inherit; }
+    #animal-monopoly-map .counter-editor summary { cursor:pointer; }
+    #animal-monopoly-map .new-game { margin-top:16px; }
     #animal-monopoly-map .play-controls { display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding-right:90px; margin-bottom:12px; }
     #animal-monopoly-map .game-button { font:500 14px/1.3 system-ui,sans-serif; min-height:44px; border:1px solid var(--ink); border-radius:7px; background:var(--ink); color:var(--paper); padding:9px 16px; }
     #animal-monopoly-map .game-button:disabled { background:var(--soft); color:var(--ink); border-color:var(--line); }
     #animal-monopoly-map .die-face { width:72px; height:72px; flex-shrink:0; display:block; }
     #animal-monopoly-map .dice-pair { display:flex; align-items:center; gap:4px; }
     #animal-monopoly-map .dice-total { font-size:13px; font-variant-numeric:tabular-nums; }
-    #animal-monopoly-map .player-summary { font-size:13px; font-variant-numeric:tabular-nums; }
     #animal-monopoly-map .turn-status { margin-bottom:12px; min-height:20px; font-size:13px; }
     #animal-monopoly-map .pieces { display:flex; flex-wrap:wrap; justify-content:center; gap:3px; width:100%; }
     #animal-monopoly-map .pieces[hidden] { display:none; }
@@ -55,10 +61,19 @@
     #animal-monopoly-map .piece-number { position:absolute; bottom:0; right:0; font:500 11px/1.2 system-ui,sans-serif; color:var(--ink); }
     #animal-monopoly-map .piece.is-active { outline:1px solid var(--ink); outline-offset:1px; border-radius:3px; }
     #animal-monopoly-map .space { flex-direction:column; gap:3px; }
-    #animal-monopoly-map .roster { display:flex; flex-wrap:wrap; gap:8px 18px; margin:10px 0 16px; }
-    #animal-monopoly-map .roster-player { display:flex; align-items:center; gap:6px; font-size:12px; }
+    #animal-monopoly-map .roster { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(135px,1fr); gap:6px; overflow-x:auto; margin-bottom:16px; }
+    #animal-monopoly-map .roster-player { padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--tile); }
+    #animal-monopoly-map .roster-player header { display:flex; align-items:center; gap:8px; font-weight:650; }
+    #animal-monopoly-map .roster-player strong { display:block; margin:5px 0; font-size:clamp(26px,4vw,44px); line-height:1.15; font-variant-numeric:tabular-nums; }
+    #animal-monopoly-map .roster-player ul { margin:4px 0 0; padding-left:1.2em; }
+    #animal-monopoly-map .roster-player.active { border-color:var(--ink); background:var(--soft); }
     #animal-monopoly-map .setup { padding:24px; background:var(--paper); border:1px solid var(--line); border-radius:10px; }
     #animal-monopoly-map .setup-form { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:16px 0; }
+    #animal-monopoly-map .player-names { flex-basis:100%; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr)); gap:12px; }
+    #animal-monopoly-map .player-names select { min-height:40px; padding:6px; font:inherit; }
+    #animal-monopoly-map .player-names label + label { margin-top:6px; }
+    #animal-monopoly-map .player-names input { width:100%; }
+    #animal-monopoly-map .roster-player header { overflow-wrap:anywhere; }
     #animal-monopoly-map .setup-form label { display:flex; flex-direction:column; gap:6px; }
     #animal-monopoly-map .setup input { width:110px; min-height:44px; font:16px system-ui,sans-serif; padding:8px; border:1px solid var(--line); border-radius:6px; background:var(--tile); color:var(--ink); }
     #animal-monopoly-map .setup[hidden],#animal-monopoly-map .game-content[hidden],#animal-monopoly-map .continue-game[hidden] { display:none; }
@@ -84,15 +99,21 @@
     @media(max-width:700px) { #animal-monopoly-map .board { display:none; } #animal-monopoly-map .mobile { display:block; } }
   </style>
   <section class="setup" aria-label="Game setup">
-    <h2 class="heading">How many players are playing?</h2>
+    <h2 class="heading">Set up your players</h2>
     <form class="setup-form">
       <label for="monopoly-player-count">Number of players<input id="monopoly-player-count" type="number" min="2" step="1" value="3" required></label>
+      <div class="player-names"></div>
       <button type="submit" class="game-button cursor-interaction">Start new game</button>
     </form>
     <p class="setup-message" role="status">Everyone starts on Go with $2,000. A new game starts with no owned properties.</p>
     <button type="button" class="game-button secondary-button continue-game cursor-interaction" hidden>Continue saved game</button>
   </section>
   <div class="game-content" hidden>
+  <div class="roster" aria-label="Players, pieces and positions"></div>
+  <aside class="trade-notice" hidden>
+    <strong role="status"></strong>
+    <button type="button" class="game-button secondary-button review-trades">Review offers</button>
+  </aside>
   <div class="play-controls">
     <div class="dice-pair" role="group" aria-label="Two dice">
       <canvas class="die-face die-one" width="144" height="144" role="img" aria-label="First die ready to roll"></canvas>
@@ -102,29 +123,21 @@
     <button type="button" class="game-button roll-button cursor-interaction">Roll dice</button>
     <button type="button" class="game-button secondary-button end-turn cursor-interaction" disabled>End turn</button>
     <button type="button" class="game-button secondary-button trade-toggle cursor-interaction" aria-expanded="false" aria-controls="monopoly-trade-panel">Trade</button>
-    <div class="player-summary">Player 1 · Cash $2,000 · 0 animals</div>
   </div>
   <div class="turn-status" role="status">Player 1 starts on Go. Roll to move.</div>
-  <div class="roster" aria-label="Players, pieces and positions"></div>
-  <section id="monopoly-trade-panel" class="trade-panel" aria-label="Property purchase requests" hidden>
-    <h3 class="detail-title">Request to buy a property</h3>
+  <section id="monopoly-trade-panel" class="trade-panel" aria-label="Property trades" hidden>
+    <h3 class="detail-title">Trade a property</h3>
     <form class="trade-form">
-      <label>Owner<select class="trade-owner" aria-label="Property owner"></select></label>
-      <label>Animal<select class="trade-property" aria-label="Animal to buy"></select></label>
-      <label>Your offer ($)<input class="trade-price" aria-label="Offer amount" type="number" min="1" step="1" inputmode="numeric" required></label>
+      <label>Action<select class="trade-mode"><option value="buy">Buy a property</option><option value="sell">Sell a property</option></select></label>
+      <label><span class="partner-label">Owner</span><select class="trade-owner"></select></label>
+      <label>Animal<select class="trade-property" aria-label="Property"></select></label>
+      <label>Price ($)<input class="trade-price" aria-label="Offer amount" type="number" min="1" step="1" inputmode="numeric" required></label>
       <button type="submit" class="game-button request-button cursor-interaction">Request to buy</button>
     </form>
     <p class="trade-note"></p>
     <p class="trade-message" role="status"></p>
     <div class="trade-requests" aria-label="Pending trade requests"></div>
   </section>
-  <div class="rent-controls">
-    <label for="animal-rent-level">Show rent for</label>
-    <select id="animal-rent-level">
-      <option value="0">No houses</option><option value="1">1 house</option><option value="2">2 houses</option><option value="3">3 houses</option><option value="4">4 houses</option><option value="5">Hotel</option>
-    </select>
-    <span class="rent-status" aria-live="polite">Suggested rent · No houses · Paid to the owner when another player lands here</span>
-  </div>
   <div class="board" role="group" aria-label="Animal Monopoly board: forty spaces, Go at bottom right, Jail at bottom left, $500 at top left, Go to Jail at top right">
     <div class="center">
       <div><h2 class="heading">ANIMAL MONOPOLY</h2><p class="subtitle">Roll, buy & trade preview</p></div>
@@ -132,6 +145,7 @@
     </div>
   </div>
   <div class="mobile"><div class="mobile-detail" aria-live="polite">Animal Monopoly · 40 spaces</div></div>
+  <button type="button" class="game-button secondary-button new-game">New game</button>
   </div>
   <script>
     (() => {
@@ -162,11 +176,9 @@
       const allTiles=[];
       const levels=['No houses','1 house','2 houses','3 houses','4 houses','Hotel'];
       const multipliers=[1,2,4,6,8,10];
-      const levelControl=root.querySelector('#animal-rent-level');
       const cornerNames=['Go','Jail','$500','Go to Jail'];
       const track=sides.flatMap((side,i)=>[cornerNames[i],...side.names]);
       let selectedAnimal=null;
-      let rentLevel=0;
       let position=0;
       let cash=2000;
       let owned=new Set();
@@ -182,10 +194,13 @@
       let gameStarted=false;
       let hasSavedGame=false;
       let turnPhase='roll';
+      let cpuTimer;
       const money=value=>'$'+value.toLocaleString('en-US');
-      const playerName=id=>'Player '+id;
+      const playerName=id=>getPlayer(id)?.name || 'Player '+id;
       const getPlayer=id=>players.find(player=>player.id===id);
       const countControl=root.querySelector('#monopoly-player-count');
+      const tradeMode=root.querySelector('.trade-mode');
+      const recipient=request=>request.kind==='sell'?request.buyer:request.seller;
       const ownerControl=root.querySelector('.trade-owner');
       const propertyControl=root.querySelector('.trade-property');
       const offerControl=root.querySelector('.trade-price');
@@ -209,7 +224,7 @@
           button.classList.toggle('is-related',button.dataset.group===group);
           button.setAttribute('aria-pressed',String(button.dataset.name===name));
         });
-        const rows=levels.map((label,i)=>'<tr'+(i===rentLevel?' class="shown-level"':'')+'><th scope="row">'+label+'</th><td>'+money(data.baseRent*multipliers[i])+'</td></tr>').join('');
+        const rows=levels.map((label,i)=>'<tr'+(i===0?' class="shown-level"':'')+'><th scope="row">'+label+'</th><td>'+money(data.baseRent*multipliers[i])+'</td></tr>').join('');
         const price=purchasePrice(name);
         const owner=ownerOf(name);
         const isOwned=owner===activePlayer;
@@ -218,9 +233,11 @@
         const canBuy=gameStarted&&turnPhase==='action'&&onProperty&&owner===null&&cash>=price;
         const groupCount=data.animals.filter(animal=>owned.has(animal)).length;
         const buttonText=isOwned?'Owned by '+playerName(owner):otherOwner?'Request to buy from '+playerName(owner):!onProperty?'Land here to buy':turnPhase!=='action'?'Roll to move first':cash<price?'Need '+money(price-cash)+' more':'Buy '+name+' · '+money(price);
-        const markup='<h3 class="detail-title">'+name+'</h3><div class="detail-meta">'+group+' group · '+(owner!==null?'Owner: '+playerName(owner):'Unowned')+'</div><div class="purchase-summary"><span>Bank price: <strong>'+money(price)+'</strong></span><span>Your cash: <strong>'+money(cash)+'</strong></span></div><table class="rent-table" aria-label="Suggested rent for '+name+'"><tbody>'+rows+'</tbody></table><div class="detail-meta">House: '+money(data.price)+' · Hotel construction: '+money(data.price*5)+' total<div class="group-members">'+data.animals.map(animal=>animal+(owned.has(animal)?' ✓':'')).join(' · ')+'</div>Your group: '+groupCount+'/'+data.animals.length+'</div><div class="buy-action"><button type="button" class="game-button buy-button cursor-interaction"'+(canBuy||otherOwner?'':' disabled')+'>'+buttonText+'</button></div><div class="group-rules">Own the full group to build. Uneven building is allowed. The fifth house becomes a hotel automatically.</div>';
+        const markup='<h3 class="detail-title">'+name+'</h3><div class="detail-meta">'+group+' group · '+(owner!==null?'Owner: <span class="owner-name"></span>':'Unowned')+'</div><div class="purchase-summary"><span>Bank price: <strong>'+money(price)+'</strong></span><span>Your cash: <strong>'+money(cash)+'</strong></span></div><table class="rent-table" aria-label="Suggested rent for '+name+'"><tbody>'+rows+'</tbody></table><div class="detail-meta">House: '+money(data.price)+' · Hotel construction: '+money(data.price*5)+' total<div class="group-members">'+data.animals.map(animal=>animal+(owned.has(animal)?' ✓':'')).join(' · ')+'</div>Your group: '+groupCount+'/'+data.animals.length+'</div><div class="buy-action"><button type="button" class="game-button buy-button cursor-interaction"'+(canBuy||otherOwner?'':' disabled')+'></button></div><div class="group-rules">Own the full group to build. Uneven building is allowed. The fifth house becomes a hotel automatically.</div>';
         panels.forEach(panel=>{
           panel.innerHTML=markup;
+          if(owner!==null) panel.querySelector('.owner-name').textContent=playerName(owner);
+          panel.querySelector('.buy-button').textContent=buttonText;
           panel.querySelector('.buy-button').addEventListener('click',()=>otherOwner?openTrade(name):buy(name));
         });
       }
@@ -230,7 +247,8 @@
         buttons.forEach(button=>{button.classList.toggle('is-related',false);button.setAttribute('aria-pressed','false');});
         const description={Go:'Collect $200 each time your move reaches or passes Go.',Jail:'Jail and release rules still need to be set.','$500':'The collect or pay rule for this corner still needs to be set.','Go to Jail':'Jail movement is not active in this preview.','Mystery Card':'15 cards proposed. Card drawing is not active in this preview.'}[name];
         panels.forEach(panel=>{
-          panel.innerHTML='<h3 class="detail-title">'+name+'</h3><p>'+description+'</p><div class="detail-meta">'+playerName(activePlayer)+' · '+money(cash)+' · '+owned.size+' animals owned</div>';
+          panel.innerHTML='<h3 class="detail-title">'+name+'</h3><p>'+description+'</p><div class="detail-meta"><span class="current-name"></span> · '+money(cash)+' · '+owned.size+' animals owned</div>';
+          panel.querySelector('.current-name').textContent=playerName(activePlayer);
         });
       }
       function refreshPanel() {
@@ -247,12 +265,56 @@
         render();
         saveState();
       }
-      function roll() {
+      const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+      const dieValue=()=>1+Math.floor(Math.random()*6);
+      async function movePiece(from,to) {
+        const animations=[];
+        for(const layout of [board,mobile]) {
+          const source=layout.querySelector('[data-index="'+from+'"] .pieces');
+          const target=layout.querySelector('[data-index="'+to+'"] .pieces');
+          const piece=source.querySelector('.is-active');
+          const before=piece.getBoundingClientRect();
+          target.hidden=false;
+          target.append(piece);
+          source.hidden=!source.childElementCount;
+          const after=piece.getBoundingClientRect();
+          if(after.width && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            piece.style.zIndex='2';
+            animations.push(piece.animate([
+              {transform:'translate('+(before.left-after.left)+'px,'+(before.top-after.top)+'px)'},
+              {transform:'translate(0,0)'}
+            ],{duration:240,easing:'ease-in-out'}).finished);
+          }
+        }
+        await Promise.all([...animations,pause(260)]);
+      }
+      async function roll() {
         if(!gameStarted||turnPhase!=='roll') return;
-        lastDice=[Math.floor(Math.random()*6)+1,Math.floor(Math.random()*6)+1];
+        turnPhase='rolling';
+        const content=root.querySelector('.game-content');
+        content.inert=true;
+        root.querySelector('.roll-button').disabled=true;
+        root.querySelector('.turn-status').textContent=playerName(activePlayer)+' is rolling…';
+        const total=root.querySelector('.dice-total');
+        total.textContent='Rolling…';
+        const first=root.querySelector('.die-one'), second=root.querySelector('.die-two');
+        for(let frame=0;frame<20;frame++) {
+          drawDie(first,dieValue(),'First die');
+          drawDie(second,dieValue(),'Second die');
+          await pause(125);
+        }
+        lastDice=[dieValue(),dieValue()];
         lastRoll=lastDice[0]+lastDice[1];
+        drawDie(first,lastDice[0],'First die');
+        drawDie(second,lastDice[1],'Second die');
+        total.textContent='Total: '+lastRoll;
+        root.querySelector('.turn-status').textContent=playerName(activePlayer)+' moves '+lastRoll+' spaces.';
         const nextPosition=position+lastRoll;
         const goBonus=Math.floor(nextPosition/track.length)*200;
+        for(let step=0;step<lastRoll;step++) {
+          await movePiece((position+step)%track.length,(position+step+1)%track.length);
+        }
+        content.inert=false;
         cash+=goBonus;
         position=nextPosition%track.length;
         turnPhase='action';
@@ -272,21 +334,26 @@
         control.value=items.some(item=>String(item.value)===String(value))?String(value):String(items[0]?.value??'');
       }
       function fillTradeProperties(preferred) {
-        const seller=getPlayer(Number(ownerControl.value));
+        const selling=tradeMode.value==='sell';
+        const seller=getPlayer(selling?activePlayer:Number(ownerControl.value));
+        root.querySelector('.partner-label').textContent=selling?'Buyer':'Owner';
+        root.querySelector('.request-button').textContent=selling?'Offer to sell':'Request to buy';
         const before=propertyControl.value;
-        const names=seller&&seller.id!==activePlayer?seller.owned:[];
+        const names=seller?.owned??[];
         setOptions(propertyControl,names.map(name=>({value:name,label:name})),preferred??before);
         const name=propertyControl.value;
         propertyControl.disabled=!name;
         offerControl.disabled=!name;
         root.querySelector('.request-button').disabled=!name;
-        offerControl.max=String(cash);
+        if(selling) offerControl.removeAttribute('max');
+        else offerControl.max=String(cash);
         if(name&&(name!==before||!offerControl.value||preferred)) offerControl.value=String(purchasePrice(name));
         if(!name) offerControl.value='';
-        root.querySelector('.trade-note').textContent=!names.length?(seller?playerName(seller.id)+' does not own any animals yet.':'Choose another player.'):'Your cash: '+money(cash)+'. Money stays with you until the owner accepts. The owner reviews requests on their turn.';
+        root.querySelector('.trade-note').textContent=!names.length?(seller?playerName(seller.id)+' does not own any animals yet.':'Choose another player.'):selling?'Choose your property and asking price. The buyer reviews your offer on their turn.':'Your cash: '+money(cash)+'. Money stays with you until the owner accepts. The owner reviews requests on their turn.';
       }
       function openTrade(name) {
         if(!gameStarted) return;
+        tradeMode.value='buy';
         tradeOpen=true;
         renderTrades();
         const owner=name?ownerOf(name):null;
@@ -296,31 +363,46 @@
         event.preventDefault();
         if(!gameStarted) return;
         syncPlayer();
-        const seller=Number(ownerControl.value),name=propertyControl.value,amount=Number(offerControl.value);
-        if(!getPlayer(seller)||seller===activePlayer||ownerOf(name)!==seller) tradeMessage='Choose an animal owned by another player.';
+        const selling=tradeMode.value==='sell';
+        const partner=Number(ownerControl.value);
+        const seller=selling?activePlayer:partner;
+        const buyer=selling?partner:activePlayer;
+        const name=propertyControl.value,amount=Number(offerControl.value);
+        if(!getPlayer(partner)||partner===activePlayer||ownerOf(name)!==seller) tradeMessage='Choose a player and a property owned by the seller.';
         else if(!Number.isSafeInteger(amount)||amount<=0) tradeMessage='Enter a positive whole-dollar offer.';
-        else if(amount>cash) tradeMessage='Your offer exceeds your current cash.';
-        else if(requests.some(item=>item.buyer===activePlayer&&item.animal===name)) tradeMessage='You already have a pending offer for this animal. Cancel it first to change the price.';
+        else if(!selling&&amount>cash) tradeMessage='Your offer exceeds your current cash.';
+        else if(requests.some(item=>item.buyer===buyer&&item.seller===seller&&item.kind===tradeMode.value&&item.animal===name)) tradeMessage='You already have a pending offer for this animal. Cancel it first to change the price.';
         else {
-          requests.push({id:nextRequestId++,buyer:activePlayer,seller,animal:name,amount});
-          tradeMessage=playerName(activePlayer)+' offered '+money(amount)+' to '+playerName(seller)+' for '+name+'. Awaiting the owner’s decision.';
+          requests.push({id:nextRequestId++,kind:tradeMode.value,buyer,seller,animal:name,amount});
+          tradeMessage=selling?'Offered to sell '+name+' to '+playerName(buyer)+' for '+money(amount)+'.':playerName(activePlayer)+' offered '+money(amount)+' to '+playerName(seller)+' for '+name+'. Awaiting the owner’s decision.';
           saveState();
         }
         renderTrades();
       }
-      function decideTrade(id,decision) {
+      function decideTrade(id,decision,price) {
         if(!gameStarted) return;
         syncPlayer();
         const request=requests.find(item=>item.id===id);
         if(!request) return;
         const seller=getPlayer(request.seller),buyer=getPlayer(request.buyer);
         if(decision==='cancel') {
-          if(activePlayer!==request.buyer) return;
+          if(activePlayer!==request.buyer&&activePlayer!==request.seller || activePlayer===recipient(request)) return;
           requests=requests.filter(item=>item.id!==id);
           tradeMessage='Offer for '+request.animal+' cancelled.';
         } else {
-          if(activePlayer!==request.seller) return;
-          if(decision==='decline') {
+          if(activePlayer!==recipient(request)) return;
+          if(decision==='counter') {
+            if(!Number.isSafeInteger(price)||price<=0||price===request.amount) {
+              tradeMessage='Enter a different positive whole-dollar price.';
+            } else if(activePlayer===buyer.id && price>buyer.cash) {
+              tradeMessage='Your counteroffer exceeds your cash.';
+            } else {
+              request.amount=price;
+              request.kind=activePlayer===buyer.id?'buy':'sell';
+              request.counter=true;
+              tradeMessage='Counteroffer sent to '+playerName(recipient(request))+'.';
+            }
+          } else if(decision==='decline') {
             requests=requests.filter(item=>item.id!==id);
             tradeMessage=playerName(activePlayer)+' declined the offer for '+request.animal+'.';
           } else if(decision==='accept') {
@@ -345,7 +427,17 @@
         saveState();
       }
       function renderTrades() {
-        const incoming=requests.filter(item=>item.seller===activePlayer);
+        const incoming=requests.filter(item=>recipient(item)===activePlayer);
+        const notice=root.querySelector('.trade-notice');
+        notice.hidden=!incoming.length;
+        const counts=[];
+        const counters=incoming.filter(item=>item.counter).length;
+        for(const [count,type] of [[incoming.length-counters,'trade request'],[counters,'counteroffer']]) {
+          if(count) counts.push(count+' '+type+(count===1?'':'s'));
+        }
+        const message=incoming.length?playerName(activePlayer)+', you have '+counts.join(' and ')+'.':'';
+        const status=notice.querySelector('strong');
+        if(status.textContent!==message) status.textContent=message;
         const toggle=root.querySelector('.trade-toggle');
         toggle.textContent='Trade'+(incoming.length?' · '+incoming.length+' incoming':'');
         toggle.setAttribute('aria-expanded',String(tradeOpen));
@@ -362,14 +454,35 @@
         relevant.forEach(request=>{
           const row=document.createElement('div');row.className='request-row';
           const label=document.createElement('span');label.className='request-text';
-          label.textContent=playerName(request.buyer)+' → '+playerName(request.seller)+': '+request.animal+' for '+money(request.amount);
+          const terms=request.animal+' for '+money(request.amount);
+          label.textContent=request.kind==='sell'
+            ?playerName(request.seller)+' offers to sell '+terms+' to '+playerName(request.buyer)
+            :playerName(request.buyer)+' offers to buy '+terms+' from '+playerName(request.seller);
+          if(request.counter) label.prepend('Counteroffer · ');
           row.appendChild(label);
-          const actions=request.seller===activePlayer?[['Accept','accept'],['Decline','decline']]:[['Cancel request','cancel']];
+          const actions=recipient(request)===activePlayer?[['Accept','accept'],['Decline','decline']]:[['Cancel request','cancel']];
           actions.forEach(([title,action])=>{
             const button=document.createElement('button');button.type='button';button.className='game-button cursor-interaction'+(action==='accept'?'':' secondary-button');button.textContent=title;
             button.dataset.requestId=String(request.id);button.dataset.action=action;
             button.addEventListener('click',()=>decideTrade(request.id,action));row.appendChild(button);
           });
+          if(recipient(request)===activePlayer) {
+            const editor=document.createElement('details');
+            editor.className='counter-editor';
+            const summary=document.createElement('summary');
+            summary.textContent='Counteroffer';
+            const price=document.createElement('input');
+            price.type='number';price.min='1';price.step='1';price.required=true;
+            price.value=String(request.amount);
+            price.setAttribute('aria-label','New price for '+request.animal);
+            const send=document.createElement('button');
+            send.type='button';send.className='game-button';send.textContent='Send counteroffer';
+            send.addEventListener('click',()=>{
+              if(price.reportValidity()) decideTrade(request.id,'counter',price.valueAsNumber);
+            });
+            editor.append(summary,'New price ($)',price,send);
+            row.appendChild(editor);
+          }
           list.appendChild(row);
         });
       }
@@ -380,19 +493,51 @@
         activePlayer=players[(index+1)%players.length].id;
         loadPlayer();lastRoll=0;lastDice=[0,0];turnPhase='roll';
         selectedAnimal=animalGroups[track[position]]?track[position]:null;
-        tradeOpen=requests.some(request=>request.seller===activePlayer);
+        tradeOpen=requests.some(request=>recipient(request)===activePlayer);
         tradeMessage='';turnMessage=playerName(activePlayer)+'’s turn. Roll the dice.';
         render();saveState();
+      }
+      const nameFields=root.querySelector('.player-names');
+      function updateNameFields() {
+        const count=countControl.valueAsNumber;
+        if(!Number.isSafeInteger(count)||count<2) return;
+        while(nameFields.children.length>count) nameFields.lastElementChild.remove();
+        while(nameFields.children.length<count) {
+          const label=document.createElement('label');
+          label.textContent='Player '+(nameFields.children.length+1)+' name';
+          const input=document.createElement('input');
+          input.type='text';
+          input.required=true;
+          input.pattern=String.raw`.*\S.*`;
+          input.title='Enter a player name';
+          label.append(input);
+          const slot=document.createElement('div');
+          const typeLabel=document.createElement('label');
+          typeLabel.textContent='Player '+(nameFields.children.length+1)+' type';
+          const type=document.createElement('select');
+          type.append(new Option('Human','human'),new Option('CPU','cpu'));
+          const defaultName='CPU '+(nameFields.children.length+1);
+          type.addEventListener('change',()=>{
+            input.required=type.value==='human';
+            input.placeholder=input.required?'':defaultName;
+          });
+          typeLabel.append(type);
+          slot.append(label,typeLabel);
+          nameFields.append(slot);
+        }
       }
       function startGame(event) {
         event.preventDefault();
         if(gameStarted) return;
         const count=Number(countControl.value);
         if(!Number.isSafeInteger(count)||count<2) {root.querySelector('.setup-message').textContent='Enter a whole number of at least 2 players.';return;}
-        players=Array.from({length:count},(_,i)=>({id:i+1,position:0,cash:2000,owned:[],lastRoll:0}));
+        players=Array.from(nameFields.children,(slot,i)=>({
+          id:i+1,name:slot.querySelector('input').value.trim()||'CPU '+(i+1),
+          cpu:slot.querySelector('select').value==='cpu',position:0,cash:2000,owned:[],lastRoll:0
+        }));
         activePlayer=1;loadPlayer();lastDice=[0,0];
-        selectedAnimal=null;rentLevel=0;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage='';turnPhase='roll';gameStarted=true;hasSavedGame=true;
-        turnMessage='Player 1’s turn. Everyone starts on Go. Roll the dice.';
+        selectedAnimal=null;requests=[];nextRequestId=1;tradeOpen=false;tradeMessage='';turnPhase='roll';gameStarted=true;hasSavedGame=true;
+        turnMessage=playerName(1)+'’s turn. Everyone starts on Go. Roll the dice.';
         render();saveState();
       }
       function continueGame() {
@@ -479,6 +624,27 @@
           cells.appendChild(cell(name,side.draft.includes(i),null,trackIndex));
         });
       });
+      function takeCpuTurn() {
+        if(!gameStarted||!getPlayer(activePlayer)?.cpu||turnPhase==='rolling') return;
+        const offer=requests.find(request=>recipient(request)===activePlayer);
+        if(offer) {
+          const value=purchasePrice(offer.animal);
+          const buying=offer.buyer===activePlayer;
+          const acceptable=buying?offer.amount<=value && offer.amount<=cash:offer.amount>=value;
+          decideTrade(offer.id,acceptable?'accept':'decline');
+          return;
+        }
+        if(turnPhase==='roll') {
+          roll();
+          return;
+        }
+        const name=track[position];
+        if(animalGroups[name] && ownerOf(name)===null && cash>=purchasePrice(name)) {
+          buy(name);
+          return;
+        }
+        endTurn();
+      }
       function render() {
         syncPlayer();
         root.querySelector('.setup').hidden=gameStarted;
@@ -487,7 +653,6 @@
         root.querySelector('.continue-game').textContent='Continue saved game ('+players.length+' players)';
         root.querySelector('.roll-button').disabled=!gameStarted||turnPhase!=='roll';
         root.querySelector('.end-turn').disabled=!gameStarted||turnPhase!=='action';
-        levelControl.value=String(rentLevel);
         allTiles.forEach(tile=>{
           const isCurrent=Number(tile.dataset.index)===position;
           const occupants=players.filter(player=>player.position===Number(tile.dataset.index));
@@ -500,14 +665,12 @@
         });
         buttons.forEach(button=>{
           const data=groups[button.dataset.group];
-          const rent=money(data.baseRent*multipliers[rentLevel]);
+          const rent=money(data.baseRent);
           button.querySelector('.rent-label').textContent='Rent '+rent;
           const owner=ownerOf(button.dataset.name);
           button.querySelector('.owned-mark').hidden=owner===null;
-          button.setAttribute('aria-label',button.dataset.name+', '+button.dataset.group+' group, buy '+money(purchasePrice(button.dataset.name))+', '+levels[rentLevel]+' rent '+rent+', '+money(data.price)+' per house, '+(owner!==null?'owned by '+playerName(owner):'unowned')+(Number(button.dataset.index)===position?', '+playerName(activePlayer)+' is here':'')+(button.dataset.draft==='true'?', provisional position':''));
+          button.setAttribute('aria-label',button.dataset.name+', '+button.dataset.group+' group, buy '+money(purchasePrice(button.dataset.name))+', no houses rent '+rent+', '+money(data.price)+' per house, '+(owner!==null?'owned by '+playerName(owner):'unowned')+(Number(button.dataset.index)===position?', '+playerName(activePlayer)+' is here':'')+(button.dataset.draft==='true'?', provisional position':''));
         });
-        root.querySelector('.rent-status').textContent='Rent preview: '+levels[rentLevel]+' · This selector does not build houses.';
-        root.querySelector('.player-summary').textContent=playerName(activePlayer)+' · Cash '+money(cash)+' · '+owned.size+' animals';
         root.querySelector('.subtitle').textContent=playerName(activePlayer)+'’s turn · '+(turnPhase==='roll'?'Roll the dice':'Buy or trade, then End turn');
         drawDie(root.querySelector('.die-one'),lastDice[0],'First die');
         drawDie(root.querySelector('.die-two'),lastDice[1],'Second die');
@@ -515,20 +678,40 @@
         const roster=root.querySelector('.roster');roster.replaceChildren();
         players.forEach(player=>{
           const entry=document.createElement('div');entry.className='roster-player';
-          const label=document.createElement('span');label.textContent=playerName(player.id)+(player.id===activePlayer?' · Your turn':'')+' · '+money(player.cash)+' · '+track[player.position];
-          entry.append(createPiece(player),label);roster.appendChild(entry);
+          const active=player.id===activePlayer;
+          entry.classList.toggle('active',active);
+          const title=document.createElement('header');
+          title.append(createPiece(player),playerName(player.id)+(player.cpu?' (CPU)':'')+(active?' · Your turn':''));
+          const balance=document.createElement('strong');
+          balance.textContent=money(player.cash);
+          entry.append(title,balance,player.owned.length?'Properties':'No properties yet');
+          if(player.owned.length) {
+            const list=document.createElement('ul');
+            for(const name of player.owned) {
+              const item=document.createElement('li');
+              item.textContent=name;
+              list.append(item);
+            }
+            entry.append(list);
+          }
+          roster.append(entry);
         });
         root.querySelector('.turn-status').textContent=turnMessage;
         refreshPanel();
         renderTrades();
+        clearTimeout(cpuTimer);
+        const cpuTurn=gameStarted && getPlayer(activePlayer)?.cpu===true;
+        for(const selector of ['.play-controls','.trade-panel','.trade-notice','.board','.mobile']) {
+          root.querySelector(selector).inert=cpuTurn;
+        }
+        if(cpuTurn) cpuTimer=setTimeout(takeCpuTurn,850);
       }
       function saveState() {
         syncPlayer();
-        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,rentLevel,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=>({...player,owned:[...player.owned]})),requests:requests.map(request=>({...request})),tradeOpen},privateContent:null}).catch(()=>{});
+        if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{selectedAnimal,gameVersion:3,gameStarted,turnPhase,activePlayer,lastDice:[...lastDice],players:players.map(player=>({...player,owned:[...player.owned]})),requests:requests.map(request=>({...request})),tradeOpen},privateContent:null}).catch(()=>{});
       }
       function applyState(state) {
         if(state?.selectedAnimal===null||animalGroups[state?.selectedAnimal]) selectedAnimal=state.selectedAnimal;
-        if(Number.isInteger(state?.rentLevel) && state.rentLevel>=0 && state.rentLevel<=5) rentLevel=state.rentLevel;
         if(state?.gameVersion===1) {
           activePlayer=1;
           if(Number.isInteger(state.position)&&state.position>=0&&state.position<40) position=state.position;
@@ -543,7 +726,8 @@
             if(!player||!Number.isSafeInteger(player.id)||player.id<1||seenIds.has(player.id)) return false;
             seenIds.add(player.id);return true;
           }).map(player=>({
-            id:player.id,
+            id:player.id,cpu:player.cpu===true,
+            name:typeof player.name==='string'?player.name.trim():'',
             position:Number.isInteger(player.position)&&player.position>=0&&player.position<40?player.position:0,
             cash:Number.isSafeInteger(player.cash)&&player.cash>=0?player.cash:2000,
             lastRoll:Number.isInteger(player.lastRoll)&&player.lastRoll>=0&&player.lastRoll<=12?player.lastRoll:0,
@@ -560,7 +744,7 @@
             requests=(Array.isArray(state.requests)?state.requests:[]).filter(request=>{
               if(!request||!Number.isSafeInteger(request.id)||request.id<1||seenRequests.has(request.id)||!getPlayer(request.buyer)||!getPlayer(request.seller)||request.buyer===request.seller||!Object.hasOwn(animalGroups,request.animal)||ownerOf(request.animal)!==request.seller||!Number.isSafeInteger(request.amount)||request.amount<=0) return false;
               seenRequests.add(request.id);return true;
-            }).map(request=>({id:request.id,buyer:request.buyer,seller:request.seller,animal:request.animal,amount:request.amount}));
+            }).map(request=>({id:request.id,counter:request.counter===true,kind:request.kind==='sell'?'sell':'buy',buyer:request.buyer,seller:request.seller,animal:request.animal,amount:request.amount}));
             nextRequestId=Math.max(0,...requests.map(request=>request.id))+1;
             tradeOpen=Boolean(state.tradeOpen);
             hasSavedGame=true;
@@ -568,6 +752,7 @@
             turnPhase=state.gameVersion===3&&state.turnPhase==='action'?'action':'roll';
             lastDice=turnPhase==='action'&&Array.isArray(state.lastDice)&&state.lastDice.length===2&&state.lastDice.every(value=>Number.isInteger(value)&&value>=1&&value<=6)&&state.lastDice[0]+state.lastDice[1]===lastRoll?[...state.lastDice]:[0,0];
             countControl.value=String(Math.max(2,players.length));
+            if(!gameStarted) updateNameFields();
             turnMessage=playerName(activePlayer)+'’s turn. '+(turnPhase==='action'?'Finish your action, then End turn.':'Roll the dice.');
           }
         }
@@ -575,16 +760,42 @@
       }
       const state=window.openai?.widgetState?.modelContent;
       applyState(state);
+      updateNameFields();
+      countControl.addEventListener('input',updateNameFields);
+      root.querySelector('.new-game').addEventListener('click',()=>{
+        gameStarted=false;
+        updateNameFields();
+        root.querySelector('.setup-message').textContent='Starting a new game replaces the saved game.';
+        render();
+        nameFields.querySelector('input').focus();
+      });
       root.querySelector('.roll-button').addEventListener('click',roll);
       root.querySelector('.end-turn').addEventListener('click',endTurn);
-      root.querySelector('.setup-form').addEventListener('submit',startGame);
+      // Handle local actions directly because the embedded board blocks form submission.
+      function bindAction(form, action) {
+        const activate = event => {
+          event.preventDefault();
+          if (form.reportValidity()) action(event);
+        };
+        form.querySelector('button').addEventListener('click', activate);
+        form.addEventListener('keydown', event => {
+          if (event.key === 'Enter' && event.target.tagName === 'INPUT') activate(event);
+        });
+      }
+      bindAction(root.querySelector('.setup-form'), startGame);
       root.querySelector('.continue-game').addEventListener('click',continueGame);
       root.querySelector('.trade-toggle').addEventListener('click',()=>{if(!gameStarted)return;tradeOpen=!tradeOpen;renderTrades();saveState();});
+      root.querySelector('.review-trades').addEventListener('click',()=>{
+        tradeOpen=true;
+        renderTrades();
+        root.querySelector('.trade-requests [data-action="accept"]')?.focus();
+      });
+      tradeMode.addEventListener('change',()=>{tradeMessage='';renderTrades();});
       ownerControl.addEventListener('change',()=>fillTradeProperties());
       propertyControl.addEventListener('change',()=>{offerControl.value=propertyControl.value?String(purchasePrice(propertyControl.value)):'';});
-      root.querySelector('.trade-form').addEventListener('submit',requestTrade);
-      levelControl.addEventListener('change',()=>{rentLevel=Number(levelControl.value);render();saveState();});
+      bindAction(root.querySelector('.trade-form'), requestTrade);
       window.addEventListener('openai:set_globals',event=>{
+        if(turnPhase==='rolling') return;
         applyState(event.detail?.globals?.widgetState?.modelContent);
       });
     })();
