@@ -10,7 +10,7 @@
 
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Animal Monopoly" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts allow-top-navigation-by-user-activation" referrerpolicy="no-referrer" title="Animal Monopoly" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -1918,8 +1918,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .house-option p { font-size:16px; margin:8px 0; }
     #animal-monopoly-map .house-option button { margin:4px 8px 4px 0; }
     #animal-monopoly-map .house-summary { font-size:18px; }
+    #animal-monopoly-map .back-home { display:inline-flex; align-items:center; text-decoration:none; margin-bottom:18px; }
   &lt;/style&gt;
   &lt;section class=&quot;setup&quot; aria-label=&quot;Game setup&quot;&gt;
+    &lt;a class=&quot;game-button secondary-button back-home&quot; href=&quot;../../#projects&quot; target=&quot;_top&quot;&gt;Back&lt;/a&gt;
     &lt;h2 class=&quot;heading&quot;&gt;Set up your players&lt;/h2&gt;
     &lt;form class=&quot;setup-form&quot;&gt;
       &lt;label for=&quot;monopoly-player-count&quot;&gt;Number of players&lt;input id=&quot;monopoly-player-count&quot; type=&quot;number&quot; min=&quot;2&quot; step=&quot;1&quot; value=&quot;3&quot; required&gt;&lt;/label&gt;
