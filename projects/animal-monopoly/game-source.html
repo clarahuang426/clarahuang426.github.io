@@ -160,6 +160,7 @@
     <button type="button" class="game-button secondary-button trade-toggle cursor-interaction" aria-expanded="false" aria-controls="monopoly-trade-panel">Trade</button>
     <button type="button" class="game-button secondary-button house-toggle" aria-haspopup="dialog">Buy a house</button>
     <button type="button" class="game-button secondary-button house-sell-toggle" aria-haspopup="dialog">Sell a house</button>
+    <button type="button" class="game-button secondary-button property-sell-toggle" aria-haspopup="dialog">Sell property</button>
   </div>
   <div class="landing-choice" hidden>
     <button type="button" class="game-button landing-buy"></button>
@@ -196,7 +197,7 @@
     <button type="button" class="game-button mystery-continue" autofocus>Continue</button>
   </dialog>
   <dialog class="mystery-dialog house-dialog" aria-labelledby="house-title">
-    <h2 id="house-title">Buy or sell houses</h2>
+    <h2 id="house-title">Manage properties and houses</h2>
     <p class="house-summary"></p>
     <div class="house-list"></div>
     <button type="button" class="game-button mystery-continue house-close">Done</button>
@@ -328,18 +329,35 @@
         turnMessage=(level===5?'Downgraded the hotel to four houses on ':'Sold one house on ')+name+' for '+money(refund)+' (60% of construction price). Rent is now '+money(propertyRent(name))+'.';
         render();saveState();
       }
+      function propertySaleRefund(name) {
+        const player=getPlayer(ownerOf(name));
+        return Math.round((player.purchaseCosts[name]+houseLevel(name)*groups[animalGroups[name]].price)*60)/100;
+      }
+      function sellProperty(name) {
+        if(!buildingAllowed()||ownerOf(name)!==activePlayer) return;
+        const player=getPlayer(activePlayer);
+        const refund=propertySaleRefund(name);
+        cash=Math.round((cash+refund)*100)/100;
+        owned.delete(name);
+        delete player.purchaseCosts[name];
+        delete player.houses[name];
+        requests=requests.filter(request=>request.animal!==name);
+        if(track[position]===name) leftProperty=true;
+        turnMessage='Sold '+name+' back to the bank for '+money(refund)+' (60% of the property purchase price and its buildings’ construction cost).';
+        render();saveState();
+      }
       function renderHousePicker() {
         const dialog=root.querySelector('.house-dialog');
         if(!dialog.open) return;
         if(!buildingAllowed()||getPlayer(activePlayer).cpu) {dialog.close();return;}
-        dialog.querySelector('.house-summary').textContent=playerName(activePlayer)+' · Cash: '+money(cash)+'. Build with a complete color set, or sell a house for 60% of its construction price whenever you choose.';
+        dialog.querySelector('.house-summary').textContent=playerName(activePlayer)+' · Cash: '+money(cash)+'. Sell properties for 60% of what you paid, or houses for 60% of construction price. Property sales include a 60% refund for its houses or hotel.';
         const list=dialog.querySelector('.house-list');
         list.replaceChildren();
         for(const [color,group] of Object.entries(groups)) {
           const fullSet=completeSet(activePlayer,color);
           for(const name of group.animals) {
             const level=houseLevel(name);
-            if(ownerOf(name)!==activePlayer||(!fullSet&&!level)) continue;
+            if(ownerOf(name)!==activePlayer) continue;
             const row=document.createElement('section');row.className='house-option';
             const heading=document.createElement('h3');heading.textContent=name+' · '+color;
             const info=document.createElement('p');info.textContent=(fullSet?'Complete set · ':'')+levels[level]+' · Rent '+money(propertyRent(name));
@@ -351,10 +369,13 @@
             sell.disabled=level===0;
             sell.textContent=(level===5?'Sell hotel upgrade (keep 4 houses)':'Sell one house')+' · Get '+money(Math.round(group.price*60)/100);
             sell.addEventListener('click',()=>sellHouse(name));
-            row.append(heading,info,button,sell);list.append(row);
+            const sellPropertyButton=document.createElement('button');sellPropertyButton.type='button';sellPropertyButton.className='game-button secondary-button';
+            sellPropertyButton.textContent='Sell property · Get '+money(propertySaleRefund(name))+(level>0?' · Includes '+(level===5?'hotel':levels[level]):'');
+            sellPropertyButton.addEventListener('click',()=>sellProperty(name));
+            row.append(heading,info,button,sell,sellPropertyButton);list.append(row);
           }
         }
-        if(!list.childElementCount) list.textContent='No houses to sell or complete color sets to build on yet. Collect all three properties of a color, or both black properties, to build houses.';
+        if(!list.childElementCount) list.textContent='You do not own any properties yet. Land on an unowned property to buy it.';
       }
       function select(group,name) {
         selectedAnimal=name;
@@ -1035,6 +1056,7 @@
         }
         root.querySelector('.house-toggle').disabled=!buildingAllowed();
         root.querySelector('.house-sell-toggle').disabled=!buildingAllowed();
+        root.querySelector('.property-sell-toggle').disabled=!buildingAllowed();
         renderHousePicker();
         renderMysteryCard();
         if(gameStarted&&!mysteryPending&&turnPhase!=='finished'&&(cpuTurn||(!getPlayer(activePlayer).bankrupt&&requests.some(r=>getPlayer(recipient(r)).cpu)))) cpuTimer=setTimeout(takeCpuTurn,850);
@@ -1134,7 +1156,7 @@
         });
       }
       bindAction(root.querySelector('.setup-form'), startGame);
-      root.querySelectorAll('.house-toggle,.house-sell-toggle').forEach(button=>button.addEventListener('click',()=>{
+      root.querySelectorAll('.house-toggle,.house-sell-toggle,.property-sell-toggle').forEach(button=>button.addEventListener('click',()=>{
         if(!buildingAllowed()||getPlayer(activePlayer).cpu) return;
         root.querySelector('.house-dialog').showModal();renderHousePicker();
       }));

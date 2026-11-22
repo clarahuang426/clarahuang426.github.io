@@ -16,3 +16,5 @@ Mystery Cards appear in a large shared-screen dialog for both humans and CPUs. C
 The Buy a house panel also lets you voluntarily sell houses before or after rolling on your turn, regardless of your cash balance. Each sold house returns 60% of its color’s construction price and reduces rent; you keep the property. A hotel is sold down to four houses one upgrade at a time. A complete color set is not required to sell existing houses.
 
 Owned properties show a color marker matching their owner’s player piece, rather than an owner-name label. The property details and accessible tile labels still identify the owner by name.
+
+Use Sell property to sell an owned property back to the bank for 60% of your recorded purchase price, before or after rolling on your turn. Properties can be sold with houses or a hotel: the payout also includes 60% of their construction cost (a hotel represents five house purchases), and the buildings are removed. Sold properties become unowned and their pending trades are cancelled.

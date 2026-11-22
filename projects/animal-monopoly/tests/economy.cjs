@@ -83,6 +83,14 @@ c.players[1].houses.Rent=2;run(c,"sellHouse('Rent')");assert.equal(c.cash,2180);
 c.players[0].houses.Cat=5;run(c,"sellHouse('Cat')");assert.equal(c.players[0].houses.Cat,4);assert.equal(c.cash,2240);
 c.mysteryPending=true;run(c,"sellHouse('Cat')");assert.equal(c.cash,2240);
 c.mysteryPending=false;c.turnPhase='finished';run(c,"sellHouse('Cat')");assert.equal(c.cash,2240);
+// Voluntary property sales return the actual recorded price's 60%.
+c=game(2000,{Cat:301,Dog:200});c.turnPhase='roll';c.track=['Cat'];c.leftProperty=false;c.requests=[{animal:'Cat'},{animal:'Dog'}];run(c,"sellProperty('Cat')");assert.equal(c.cash,2180.6);assert.equal(c.owned.has('Cat'),false);assert.equal(c.players[0].purchaseCosts.Cat,undefined);assert.equal(c.requests.length,1);assert.equal(c.leftProperty,true);assert.equal(run(c,"ownerOf('Cat')"),null);
+run(c,"sellProperty('Cat')");run(c,"sellProperty('Rent')");assert.equal(c.cash,2180.6);
+c.players[0].houses.Dog=1;c.turnPhase='action';run(c,"sellProperty('Dog')");assert.equal(c.owned.has('Dog'),false);assert.equal(c.cash,2360.6);assert.equal(c.players[0].houses.Dog,undefined);
+run(c,"sellHouse('Dog')");run(c,"sellProperty('Dog')");assert.equal(c.owned.size,0);assert.equal(c.cash,2360.6);
+for(const level of [2,3,4,5]) {c=game(2000,{Cat:301});c.players[0].houses.Cat=level;run(c,"sellProperty('Cat')");assert.equal(c.cash,2180.6+level*60);assert.equal(c.players[0].houses.Cat,undefined);assert.equal(run(c,"houseLevel('Cat')"),0);}
+c=game(2000,{Cat:200});c.mysteryPending=true;run(c,"sellProperty('Cat')");assert.equal(c.owned.size,1);c.mysteryPending=false;c.turnPhase='finished';run(c,"sellProperty('Cat')");assert.equal(c.owned.size,1);
+console.log('Passed voluntary property-sale checks: actual-price refund, ownership, repeat-sale prevention, trade cleanup, house and hotel refunds, and turn guards.');
 console.log('Passed voluntary house-sale checks: 60% refund, ownership, rent decrease, full-cash sales, before/after roll, incomplete sets, repeated sales, and hotel downgrade.');
 console.log('Passed house checks: complete sets of three and two, insufficient cash, hotel cap, modal guard, rent, trades, forced sales, and save restoration.');
 console.log('Passed Mystery Card checks: large-dialog content, CPU pause, blocked end turn, Continue resumes play, and restored pending cards.');
