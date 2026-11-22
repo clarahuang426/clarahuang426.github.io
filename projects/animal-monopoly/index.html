@@ -1868,7 +1868,14 @@ html&gt;body{padding:0}&lt;/style&gt;
     #animal-monopoly-map .setup-form label { display:flex; flex-direction:column; gap:6px; }
     #animal-monopoly-map .setup input { width:110px; min-height:44px; font:16px system-ui,sans-serif; padding:8px; border:1px solid var(--line); border-radius:6px; background:var(--tile); color:var(--ink); }
     #animal-monopoly-map .setup[hidden],#animal-monopoly-map .game-content[hidden],#animal-monopoly-map .continue-game[hidden] { display:none; }
-    #animal-monopoly-map .owned-mark { display:block; width:24px; height:10px; flex-shrink:0; border-radius:999px; background:var(--owner-color); border:1px solid var(--ink); }
+    #animal-monopoly-map .owned-mark { display:block; position:absolute; top:3px; left:50%; transform:translateX(-50%); width:24px; height:10px; border-radius:999px; background:var(--owner-color); border:1px solid var(--ink); pointer-events:none; }
+    #animal-monopoly-map .space[data-group] { padding-top:18px; }
+    #animal-monopoly-map .board .side-top[data-group] { padding:6px 3px 18px; }
+    #animal-monopoly-map .board .side-top .owned-mark { top:auto; bottom:3px; }
+    #animal-monopoly-map .board .side-left[data-group] { padding:6px 18px 6px 3px; }
+    #animal-monopoly-map .board .side-left .owned-mark { top:50%; left:auto; right:3px; width:10px; height:24px; transform:translateY(-50%); }
+    #animal-monopoly-map .board .side-right[data-group] { padding:6px 3px 6px 18px; }
+    #animal-monopoly-map .board .side-right .owned-mark { top:50%; left:3px; width:10px; height:24px; transform:translateY(-50%); }
     #animal-monopoly-map .owned-mark[hidden] { display:none; }
     #animal-monopoly-map .purchase-summary { display:flex; flex-wrap:wrap; justify-content:center; gap:5px 16px; margin:7px 0; }
     #animal-monopoly-map .buy-action { margin:9px 0 5px; }
